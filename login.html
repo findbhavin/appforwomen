@@ -231,16 +231,16 @@
                 if (!user || !user.email) {
                     throw new Error('Login succeeded but user session was invalid.');
                 }
-                const synced = syncLocalUser(user, false);
-                const target = synced && synced.setupDone ? 'index.html' : 'setup.html';
-                showToast(target === 'index.html' ? 'Welcome back!' : 'Please complete setup to continue.', 'success');
+                syncLocalUser(user, false);
+                const target = 'index.html';
+                showToast('Welcome back!', 'success');
                 setTimeout(function() {
                     window.location.href = target;
                 }, 900);
             } catch (err) {
                 const fallback = legacyLocalLogin(email, password);
                 if (fallback) {
-                    const target = fallback.setupDone ? 'index.html' : 'setup.html';
+                    const target = 'index.html';
                     showToast('Logged in (offline mode).', 'success');
                     setTimeout(function() {
                         window.location.href = target;
