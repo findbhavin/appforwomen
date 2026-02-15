@@ -89,18 +89,18 @@ See **BACKEND-GUIDANCE.md** for technology choices and API details.
    ```
    Then open http://localhost:8080
 
-## 🐳 Deploy with Docker on Google Cloud (Cloud Run)
+## 🐳 Single-container deploy (Docker)
 
-You can run the app as a container and deploy to **Cloud Run** (serverless, pay-per-request).
+One image runs the **full app**: Flask backend (API + auth, appointments, symptoms, SQLite) and static frontend (HTML/CSS/JS). Use the single **Dockerfile** in the project root.
 
-1. **Build and run locally (optional)**
+### Run locally
    ```bash
    docker build -t eraya .
    docker run -p 8080:8080 eraya
    ```
-   Open http://localhost:8080
+   Open http://localhost:8080 (login, booking, and symptoms all work; data is stored in the container’s SQLite DB).
 
-2. **Deploy to Cloud Run** (from the project folder)
+### Deploy to Google Cloud Run (from the project folder)
    ```bash
    gcloud run deploy eraya --source . --region us-central1 --allow-unauthenticated
    ```
