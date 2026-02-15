@@ -91,6 +91,20 @@
             }
         }
 
+        function getSafeNextPath() {
+            const params = new URLSearchParams(window.location.search);
+            const next = (params.get('next') || '').trim();
+            if (!next) return '';
+            if (next.startsWith('http://') || next.startsWith('https://') || next.startsWith('//')) return '';
+            if (next.startsWith('javascript:')) return '';
+            return next;
+        }
+
+        function shouldOpenSignupFirst() {
+            const params = new URLSearchParams(window.location.search);
+            return (params.get('intent') || '').toLowerCase() === 'signup';
+        }
+
         function setButtonBusy(buttonId, busy) {
             const button = document.getElementById(buttonId);
             if (!button) return;
@@ -232,7 +246,7 @@
                     throw new Error('Login succeeded but user session was invalid.');
                 }
                 syncLocalUser(user, false);
-                const target = 'index.html';
+                const target = getSafeNextPath() || 'index.html';
                 showToast('Welcome back!', 'success');
                 setTimeout(function() {
                     window.location.href = target;
@@ -240,7 +254,7 @@
             } catch (err) {
                 const fallback = legacyLocalLogin(email, password);
                 if (fallback) {
-                    const target = 'index.html';
+                    const target = getSafeNextPath() || 'index.html';
                     showToast('Logged in (offline mode).', 'success');
                     setTimeout(function() {
                         window.location.href = target;
@@ -286,14 +300,14 @@
                 syncLocalUser(user, true);
                 showToast('Account created! Let us set up your profile.', 'success');
                 setTimeout(function() {
-                    window.location.href = 'setup.html';
+                    window.location.href = getSafeNextPath() || 'setup.html';
                 }, 900);
             } catch (err) {
                 try {
                     legacyLocalSignup(name, email, password);
                     showToast('Account created (offline mode). Let us set up your profile.', 'success');
                     setTimeout(function() {
-                        window.location.href = 'setup.html';
+                        window.location.href = getSafeNextPath() || 'setup.html';
                     }, 900);
                 } catch (localErr) {
                     showToast(err.message || localErr.message || 'Registration failed', 'error');
@@ -362,6 +376,10 @@
                 }
             });
         });
+
+        if (shouldOpenSignupFirst()) {
+            showSignup();
+        }
     </script>
 </body>
 </html>

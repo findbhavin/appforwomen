@@ -1,14 +1,89 @@
+function isSafeFeatureTarget(target) {
+    if (!target || typeof target !== 'string') return false;
+    const trimmed = target.trim();
+    if (!trimmed) return false;
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('//')) return false;
+    if (trimmed.startsWith('javascript:')) return false;
+    return true;
+}
+
+function readLocalUser() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem('erayaUser') || '{}');
+        return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (_err) {
+        return {};
+    }
+}
+
+function redirectToSignupForFeature(target) {
+    const params = new URLSearchParams();
+    params.set('intent', 'signup');
+    params.set('next', target);
+    window.location.href = 'login.html?' + params.toString();
+}
+
+function redirectToLoginForFeature(target) {
+    const params = new URLSearchParams();
+    params.set('next', target);
+    window.location.href = 'login.html?' + params.toString();
+}
+
+function handleFeatureNavigation(target) {
+    if (!isSafeFeatureTarget(target)) return;
+
+    const goToTarget = function() {
+        window.location.href = target;
+    };
+
+    const localUser = readLocalUser();
+
+    if (window.ErayaAuth && typeof window.ErayaAuth.getCurrentUser === 'function') {
+        window.ErayaAuth.getCurrentUser()
+            .then(function(user) {
+                if (user && user.email) {
+                    goToTarget();
+                } else if (localUser && localUser.email) {
+                    redirectToLoginForFeature(target);
+                } else {
+                    redirectToSignupForFeature(target);
+                }
+            })
+            .catch(function() {
+                // If auth check fails, use local fallback before forcing signup.
+                if (localUser && localUser.email) redirectToLoginForFeature(target);
+                else redirectToSignupForFeature(target);
+            });
+        return;
+    }
+
+    if (localUser && localUser.email) redirectToLoginForFeature(target);
+    else redirectToSignupForFeature(target);
+}
+
+window.handleFeatureNavigation = handleFeatureNavigation;
+
 // Calendar functionality
 document.addEventListener('DOMContentLoaded', function() {
     generateCalendar();
 
-    // Add click handlers to cards
-    const cards = document.querySelectorAll('.card, .card-large');
-    cards.forEach(card => {
-        card.addEventListener('click', function() {
-            const heading = this.querySelector('h3');
-            if (heading) console.log('Card clicked:', heading.textContent);
-            // Add navigation logic here
+    const featureButtons = document.querySelectorAll('[data-feature-target]');
+    featureButtons.forEach(function(el) {
+        if (!el.hasAttribute('tabindex') && (el.classList.contains('card') || el.classList.contains('card-large'))) {
+            el.setAttribute('tabindex', '0');
+        }
+
+        const navigate = function(event) {
+            if (event) event.preventDefault();
+            const target = el.getAttribute('data-feature-target');
+            handleFeatureNavigation(target);
+        };
+
+        el.addEventListener('click', navigate);
+        el.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                navigate(event);
+            }
         });
     });
 });
