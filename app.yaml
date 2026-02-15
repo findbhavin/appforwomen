@@ -13,4 +13,4 @@ handlers:
     script: auto
     secure: always
 
-entrypoint: gunicorn -b :$PORT main:app
+entrypoint: gunicorn -b :$PORT --workers 1 --threads 8 --worker-class gthread --timeout 120 main:app

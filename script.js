@@ -37,9 +37,13 @@ function handleFeatureNavigation(target) {
     };
 
     const localUser = readLocalUser();
+    if (!localUser || !localUser.email) {
+        redirectToSignupForFeature(target);
+        return;
+    }
 
     if (window.ErayaAuth && typeof window.ErayaAuth.getCurrentUser === 'function') {
-        window.ErayaAuth.getCurrentUser()
+        window.ErayaAuth.getCurrentUser(2000)
             .then(function(user) {
                 if (user && user.email) {
                     goToTarget();

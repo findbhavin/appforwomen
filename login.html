@@ -113,13 +113,22 @@
             button.style.cursor = busy ? 'not-allowed' : '';
         }
 
-        async function callApi(url, method, payload) {
-            const response = await fetch(url, {
+        function callApiWithTimeout(url, method, payload, timeoutMs) {
+            const controller = new AbortController();
+            const timer = setTimeout(function() { controller.abort(); }, timeoutMs || 8000);
+            return fetch(url, {
                 method: method,
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload || {})
+                body: JSON.stringify(payload || {}),
+                signal: controller.signal
+            }).finally(function() {
+                clearTimeout(timer);
             });
+        }
+
+        async function callApi(url, method, payload) {
+            const response = await callApiWithTimeout(url, method, payload, 8000);
 
             let data = {};
             try {

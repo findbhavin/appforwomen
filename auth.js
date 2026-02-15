@@ -5,6 +5,7 @@
 (function() {
     'use strict';
     var currentUser = null;
+    var DEFAULT_TIMEOUT_MS = 6000;
 
     function fetchOptions(method, body) {
         var opts = { method: method || 'GET', credentials: 'include' };
@@ -15,11 +16,32 @@
         return opts;
     }
 
-    function getCurrentUser() {
-        return fetch('/api/me', fetchOptions()).then(function(r) { return r.json(); }).then(function(data) {
-            currentUser = data.user || null;
-            return currentUser;
+    function timedFetch(url, opts, timeoutMs) {
+        var controller = new AbortController();
+        var timer = setTimeout(function() {
+            controller.abort();
+        }, timeoutMs || DEFAULT_TIMEOUT_MS);
+
+        opts = opts || {};
+        opts.signal = controller.signal;
+        opts.credentials = 'include';
+
+        return fetch(url, opts).finally(function() {
+            clearTimeout(timer);
         });
+    }
+
+    function getCurrentUser(timeoutMs) {
+        return timedFetch('/api/me', fetchOptions(), timeoutMs || DEFAULT_TIMEOUT_MS)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                currentUser = data && data.user ? data.user : null;
+                return currentUser;
+            })
+            .catch(function() {
+                currentUser = null;
+                return null;
+            });
     }
 
     function requireLogin(onLoggedIn) {
@@ -53,6 +75,8 @@
             } else {
                 container.innerHTML = '<a href="login.html" style="color:var(--white);">Login</a>';
             }
+        }).catch(function() {
+            container.innerHTML = '<a href="login.html" style="color:var(--white);">Login</a>';
         });
     }
 
@@ -68,7 +92,7 @@
                 opts.headers['Content-Type'] = 'application/json';
                 opts.body = JSON.stringify(opts.body);
             }
-            return fetch(url, opts);
+            return timedFetch(url, opts, DEFAULT_TIMEOUT_MS);
         }
     };
 })();
