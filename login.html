@@ -91,17 +91,6 @@
             }
         }
 
-        function getNextPath(defaultPath) {
-            const params = new URLSearchParams(window.location.search);
-            const next = params.get('next');
-            if (!next) return defaultPath;
-            // Allow only same-origin relative navigation.
-            if (next.startsWith('http://') || next.startsWith('https://') || next.startsWith('//')) {
-                return defaultPath;
-            }
-            return next;
-        }
-
         function setButtonBusy(buttonId, busy) {
             const button = document.getElementById(buttonId);
             if (!button) return;
@@ -131,6 +120,14 @@
             return data;
         }
 
+        function inferSetupDone(existing, normalized) {
+            const storedProfile = safeParseObject(localStorage.getItem('userData'));
+            const perUserProfiles = safeParseObject(localStorage.getItem('userDataByEmail'));
+            return Boolean(existing.setupDone) ||
+                (storedProfile && storedProfile.email === normalized.email && Boolean(storedProfile.setupComplete)) ||
+                (perUserProfiles[normalized.email] && Boolean(perUserProfiles[normalized.email].setupComplete));
+        }
+
         function syncLocalUser(user, isNewSignup) {
             if (!user || !user.email) return;
 
@@ -142,10 +139,7 @@
 
             const users = safeParseObject(localStorage.getItem('erayaUsers'));
             const existing = users[normalized.email] || {};
-            const storedProfile = safeParseObject(localStorage.getItem('userData'));
-            const inferredSetupDone =
-                Boolean(existing.setupDone) ||
-                (storedProfile && storedProfile.email === normalized.email && Boolean(storedProfile.setupComplete));
+            const inferredSetupDone = inferSetupDone(existing, normalized);
             const setupDone = isNewSignup ? false : inferredSetupDone;
             users[normalized.email] = {
                 ...existing,
@@ -154,6 +148,55 @@
                 setupDone: setupDone
             };
             localStorage.setItem('erayaUsers', JSON.stringify(users));
+            return { user: normalized, setupDone: setupDone };
+        }
+
+        function legacyLocalLogin(email, password) {
+            const users = safeParseObject(localStorage.getItem('erayaUsers'));
+            const keys = Object.keys(users);
+            const matchKey = keys.find(function(key) {
+                return String(key).toLowerCase() === String(email).toLowerCase();
+            });
+            if (!matchKey) return null;
+            const candidate = users[matchKey];
+            if (!candidate || typeof candidate.password !== 'string') return null;
+            if (candidate.password !== password) return null;
+
+            const normalized = {
+                email: candidate.email || matchKey,
+                name: candidate.name || (candidate.email || matchKey).split('@')[0]
+            };
+            localStorage.setItem('erayaUser', JSON.stringify(normalized));
+            const setupDone = inferSetupDone(candidate, normalized);
+            users[normalized.email] = {
+                ...candidate,
+                email: normalized.email,
+                name: normalized.name,
+                setupDone: setupDone
+            };
+            localStorage.setItem('erayaUsers', JSON.stringify(users));
+            return { user: normalized, setupDone: setupDone };
+        }
+
+        function legacyLocalSignup(name, email, password) {
+            const users = safeParseObject(localStorage.getItem('erayaUsers'));
+            const keys = Object.keys(users);
+            const exists = keys.some(function(key) {
+                return String(key).toLowerCase() === String(email).toLowerCase();
+            });
+            if (exists) {
+                throw new Error('An account with this email already exists');
+            }
+
+            users[email] = {
+                email: email,
+                name: name,
+                password: password,
+                setupDone: false
+            };
+            localStorage.setItem('erayaUsers', JSON.stringify(users));
+            localStorage.setItem('erayaUser', JSON.stringify({ email: email, name: name }));
+            return { user: { email: email, name: name }, setupDone: false };
         }
 
         function showSignup() {
@@ -188,13 +231,23 @@
                 if (!user || !user.email) {
                     throw new Error('Login succeeded but user session was invalid.');
                 }
-                syncLocalUser(user, false);
-                showToast('Welcome back!', 'success');
+                const synced = syncLocalUser(user, false);
+                const target = synced && synced.setupDone ? 'index.html' : 'setup.html';
+                showToast(target === 'index.html' ? 'Welcome back!' : 'Please complete setup to continue.', 'success');
                 setTimeout(function() {
-                    window.location.href = getNextPath('index.html');
+                    window.location.href = target;
                 }, 900);
             } catch (err) {
-                showToast(err.message || 'Login failed', 'error');
+                const fallback = legacyLocalLogin(email, password);
+                if (fallback) {
+                    const target = fallback.setupDone ? 'index.html' : 'setup.html';
+                    showToast('Logged in (offline mode).', 'success');
+                    setTimeout(function() {
+                        window.location.href = target;
+                    }, 900);
+                } else {
+                    showToast(err.message || 'Login failed', 'error');
+                }
             } finally {
                 setButtonBusy('loginBtn', false);
             }
@@ -236,7 +289,15 @@
                     window.location.href = 'setup.html';
                 }, 900);
             } catch (err) {
-                showToast(err.message || 'Registration failed', 'error');
+                try {
+                    legacyLocalSignup(name, email, password);
+                    showToast('Account created (offline mode). Let us set up your profile.', 'success');
+                    setTimeout(function() {
+                        window.location.href = 'setup.html';
+                    }, 900);
+                } catch (localErr) {
+                    showToast(err.message || localErr.message || 'Registration failed', 'error');
+                }
             } finally {
                 setButtonBusy('signupBtn', false);
             }

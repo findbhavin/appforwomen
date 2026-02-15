@@ -207,6 +207,10 @@ function handleSubmit(event) {
 
     const form = event.target;
     const data = collectFormData(form);
+    const email = activeUser && activeUser.email ? activeUser.email : '';
+    if (email) {
+        data.email = email;
+    }
 
     const cycleLength = parseInt(data.cycleLength, 10);
     data.cycleLength = Number.isFinite(cycleLength) ? cycleLength : 28;
@@ -225,9 +229,7 @@ function handleSubmit(event) {
     }
 
     const users = getStoredObject('erayaUsers');
-    const email = activeUser && activeUser.email ? activeUser.email : '';
     if (email) {
-        data.email = email;
         users[email] = {
             ...(users[email] || {}),
             email: email,
