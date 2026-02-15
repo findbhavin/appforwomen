@@ -5,213 +5,395 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eraya - Settings</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .page-container {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            min-height: 100vh;
-        }
-
-        .settings-content {
-            padding: 40px;
-            background-color: var(--lavender-blush);
-        }
-
-        .settings-section {
-            background-color: var(--white);
-            border-radius: 20px;
-            padding: 35px;
-            margin-bottom: 25px;
-        }
-
-        .settings-section h3 {
-            font-size: 24px;
-            color: var(--dark-text);
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--lavender-blush);
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--lavender-blush);
-        }
-
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .setting-info h4 {
-            font-size: 16px;
-            color: var(--dark-text);
-            margin-bottom: 5px;
-        }
-
-        .setting-info p {
-            font-size: 14px;
-            color: var(--light-text);
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
-            background-color: #ddd;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .toggle-switch.active {
-            background-color: var(--blush);
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 24px;
-            height: 24px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
-
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(30px);
-        }
-    </style>
 </head>
 <body>
     <div class="page-container">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="logo.png" alt="Eraya Logo" class="logo-image">
+                <img src="images/logo.png" alt="Eraya Logo" class="logo-image">
             </div>
-            
             <nav class="nav-menu">
                 <a href="index.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Dashboard</span>
                 </a>
                 <a href="wellness.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Wellness</span>
                 </a>
                 <a href="doctors.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Doctors</span>
                 </a>
                 <a href="mycycle.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>My Cycle</span>
                 </a>
                 <a href="settings.html" class="nav-item active">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Settings</span>
-                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"/></svg>
                 </a>
                 <a href="profile.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Profile</span>
                 </a>
             </nav>
         </aside>
 
-        <div class="settings-content">
+        <!-- Settings Content -->
+        <div class="settings-main">
             <div class="page-header">
-                <h1>Settings</h1>
-                <p>Customize your Eraya experience</p>
+                <h1>⚙️ Settings</h1>
+                <p>Manage your account and preferences</p>
             </div>
 
-            <div class="settings-section">
-                <h3>Notifications</h3>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Period Reminders</h4>
-                        <p>Get notified before your period starts</p>
+            <!-- Profile Settings -->
+            <div class="settings-card">
+                <h3>Profile Settings</h3>
+                <div class="settings-form-grid">
+                    <div class="settings-field">
+                        <label>Full Name</label>
+                        <input type="text" id="settingsName" placeholder="Your name" value="User Name">
+                    </div>
+                    <div class="settings-field">
+                        <label>Email Address</label>
+                        <input type="email" id="settingsEmail" placeholder="user@eraya.com" value="user@eraya.com">
+                    </div>
+                    <div class="settings-field">
+                        <label>Phone Number</label>
+                        <input type="tel" id="settingsPhone" placeholder="+91 1234567890">
+                    </div>
+                    <div class="settings-field">
+                        <label>Date of Birth</label>
+                        <input type="date" id="settingsDob">
+                    </div>
+                </div>
+                <button class="btn-primary-settings" onclick="saveProfileSettings()">Save Changes</button>
+            </div>
+
+            <!-- Cycle Settings -->
+            <div class="settings-card">
+                <h3>Cycle Settings</h3>
+                <div class="slider-label" id="cycleLengthLabel">Average Cycle Length: <strong>28 days</strong></div>
+                <input type="range" class="range-slider" id="cycleSlider" min="20" max="45" value="28"
+                    oninput="document.getElementById('cycleLengthLabel').innerHTML='Average Cycle Length: <strong>'+this.value+' days</strong>'; updateSliderFill(this)">
+
+                <div class="slider-label" id="periodLengthLabel" style="margin-top:20px">Average Period Duration: <strong>5 days</strong></div>
+                <input type="range" class="range-slider" id="periodSlider" min="2" max="10" value="5"
+                    oninput="document.getElementById('periodLengthLabel').innerHTML='Average Period Duration: <strong>'+this.value+' days</strong>'; updateSliderFill(this)">
+
+                <div style="margin-top: 20px;">
+                    <div class="slider-label">Reminder Preferences</div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="reminder1" checked>
+                        <label for="reminder1">Remind me 2 days before period</label>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="reminder2" checked>
+                        <label for="reminder2">Remind me during fertile window</label>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="reminder3">
+                        <label for="reminder3">Daily symptom log reminder</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-card">
+                <h3>Notification Settings</h3>
+                <div class="notification-row">
+                    <div class="notification-info">
+                        <h4>Email Notifications</h4>
+                        <p>Receive updates via email</p>
                     </div>
                     <div class="toggle-switch active" onclick="this.classList.toggle('active')">
                         <div class="toggle-slider"></div>
                     </div>
                 </div>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Ovulation Alerts</h4>
-                        <p>Track your fertile window</p>
+                <div class="notification-row">
+                    <div class="notification-info">
+                        <h4>Push Notifications</h4>
+                        <p>Browser push notifications</p>
                     </div>
                     <div class="toggle-switch active" onclick="this.classList.toggle('active')">
                         <div class="toggle-slider"></div>
                     </div>
                 </div>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Daily Wellness Tips</h4>
-                        <p>Receive personalized health recommendations</p>
+                <div class="notification-row">
+                    <div class="notification-info">
+                        <h4>Wellness Tips</h4>
+                        <p>Daily personalized health tips</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <div class="notification-row">
+                    <div class="notification-info">
+                        <h4>Appointment Reminders</h4>
+                        <p>Get reminded about doctor appointments</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy & Security -->
+            <div class="settings-card">
+                <h3>Privacy &amp; Security</h3>
+                <div class="password-grid">
+                    <div class="settings-field">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPwd" placeholder="••••••••">
+                    </div>
+                </div>
+                <div class="password-two-col">
+                    <div class="settings-field">
+                        <label>New Password</label>
+                        <input type="password" id="newPwd" placeholder="••••••••">
+                    </div>
+                    <div class="settings-field">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirmPwd" placeholder="••••••••">
+                    </div>
+                </div>
+                <button class="btn-primary-settings" onclick="updatePassword()">Update Password</button>
+
+                <div class="notification-row" style="margin-top: 20px;">
+                    <div class="notification-info">
+                        <h4>Two-Factor Authentication</h4>
+                        <p>Add an extra layer of security</p>
                     </div>
                     <div class="toggle-switch" onclick="this.classList.toggle('active')">
                         <div class="toggle-slider"></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="settings-section">
-                <h3>Privacy</h3>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Data Backup</h4>
-                        <p>Automatically backup your cycle data</p>
-                    </div>
-                    <div class="toggle-switch active" onclick="this.classList.toggle('active')">
-                        <div class="toggle-slider"></div>
-                    </div>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Analytics</h4>
-                        <p>Help improve Eraya with anonymous data</p>
-                    </div>
-                    <div class="toggle-switch active" onclick="this.classList.toggle('active')">
-                        <div class="toggle-slider"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <h3>Account</h3>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Change Password</h4>
-                        <p>Update your account password</p>
-                    </div>
-                    <button class="add-symptoms-btn" style="padding: 10px 24px;">Change</button>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h4>Delete Account</h4>
-                        <p>Permanently delete your account and data</p>
-                    </div>
-                    <button class="add-symptoms-btn" style="padding: 10px 24px; background-color: #ff6b6b;">Delete</button>
+                <div style="margin-top: 25px; display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn-primary-settings" onclick="downloadData()">Download My Data</button>
+                    <button class="btn-danger-settings" onclick="deleteAccount()">Delete Account</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function safeParseObject(rawValue) {
+            if (!rawValue) return {};
+            try {
+                const parsed = JSON.parse(rawValue);
+                return parsed && typeof parsed === 'object' ? parsed : {};
+            } catch (_err) {
+                return {};
+            }
+        }
+
+        function setStoredObject(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (_err) {
+                return false;
+            }
+        }
+
+        async function fetchSessionUser() {
+            try {
+                const response = await fetch('/api/me', { credentials: 'include' });
+                const data = await response.json();
+                return data && data.user ? data.user : null;
+            } catch (_err) {
+                return null;
+            }
+        }
+
+        function updateSliderFill(slider) {
+            if (!slider) return;
+            const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.background =
+                'linear-gradient(to right, #CF7486 0%, #CF7486 ' + pct + '%, #E8E8E8 ' + pct + '%, #E8E8E8 100%)';
+        }
+
+        function getElementValue(id) {
+            const element = document.getElementById(id);
+            return element ? element.value.trim() : '';
+        }
+
+        function setElementValue(id, value) {
+            const element = document.getElementById(id);
+            if (element && value !== undefined && value !== null) {
+                element.value = String(value);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const localUser = safeParseObject(localStorage.getItem('erayaUser'));
+            const sessionUser = await fetchSessionUser();
+            const effectiveUser = sessionUser && sessionUser.email
+                ? { email: sessionUser.email, name: sessionUser.name || sessionUser.email.split('@')[0] }
+                : localUser;
+
+            if (effectiveUser.email) {
+                setStoredObject('erayaUser', effectiveUser);
+            }
+
+            if (effectiveUser.name) setElementValue('settingsName', effectiveUser.name);
+            if (effectiveUser.email) setElementValue('settingsEmail', effectiveUser.email);
+
+            const userData = safeParseObject(localStorage.getItem('userData'));
+            if (userData.phone) setElementValue('settingsPhone', userData.phone);
+            if (userData.dob) setElementValue('settingsDob', userData.dob);
+
+            if (userData.cycleLength) {
+                const cycleSlider = document.getElementById('cycleSlider');
+                if (cycleSlider) {
+                    cycleSlider.value = userData.cycleLength;
+                    updateSliderFill(cycleSlider);
+                    document.getElementById('cycleLengthLabel').innerHTML =
+                        'Average Cycle Length: <strong>' + userData.cycleLength + ' days</strong>';
+                }
+            }
+            if (userData.periodLength) {
+                const periodSlider = document.getElementById('periodSlider');
+                if (periodSlider) {
+                    periodSlider.value = userData.periodLength;
+                    updateSliderFill(periodSlider);
+                    document.getElementById('periodLengthLabel').innerHTML =
+                        'Average Period Duration: <strong>' + userData.periodLength + ' days</strong>';
+                }
+            }
+
+            document.querySelectorAll('.range-slider').forEach(function(slider) {
+                updateSliderFill(slider);
+            });
+        });
+
+        function saveProfileSettings() {
+            const name = getElementValue('settingsName');
+            const email = getElementValue('settingsEmail');
+            const phone = getElementValue('settingsPhone');
+            const dob = getElementValue('settingsDob');
+
+            if (!name || !email) {
+                showToast('Name and email are required.', 'error');
+                return;
+            }
+
+            const cycleSlider = document.getElementById('cycleSlider');
+            const periodSlider = document.getElementById('periodSlider');
+            const cycleLength = cycleSlider ? parseInt(cycleSlider.value, 10) : 28;
+            const periodLength = periodSlider ? parseInt(periodSlider.value, 10) : 5;
+
+            const user = safeParseObject(localStorage.getItem('erayaUser'));
+            const users = safeParseObject(localStorage.getItem('erayaUsers'));
+            const userData = safeParseObject(localStorage.getItem('userData'));
+
+            const prevEmail = user.email || email;
+            const nextUser = { ...user, name: name, email: email };
+            setStoredObject('erayaUser', nextUser);
+
+            if (prevEmail && users[prevEmail] && prevEmail !== email) {
+                delete users[prevEmail];
+            }
+            users[email] = {
+                ...(users[email] || {}),
+                email: email,
+                name: name,
+                setupDone: users[email] ? Boolean(users[email].setupDone) : true
+            };
+            setStoredObject('erayaUsers', users);
+
+            const mergedProfile = {
+                ...userData,
+                name: name,
+                cycleLength: Number.isFinite(cycleLength) ? cycleLength : 28,
+                periodLength: Number.isFinite(periodLength) ? periodLength : 5,
+                phone: phone,
+                dob: dob
+            };
+            setStoredObject('userData', mergedProfile);
+
+            showToast('Profile settings saved.', 'success');
+        }
+
+        function updatePassword() {
+            const current = getElementValue('currentPwd');
+            const next = getElementValue('newPwd');
+            const confirmPwd = getElementValue('confirmPwd');
+
+            if (!current || !next || !confirmPwd) {
+                showToast('Please fill all password fields', 'error');
+                return;
+            }
+            if (next.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            if (next !== confirmPwd) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+
+            setElementValue('currentPwd', '');
+            setElementValue('newPwd', '');
+            setElementValue('confirmPwd', '');
+            showToast('Password update is not yet available on server. Inputs validated.', 'success');
+        }
+
+        function downloadData() {
+            const data = {
+                user: safeParseObject(localStorage.getItem('erayaUser')),
+                profile: safeParseObject(localStorage.getItem('userData')),
+                symptoms: safeParseObject(localStorage.getItem('symptomsData')),
+                wellness: safeParseObject(localStorage.getItem('wellnessStats'))
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = 'eraya-data.json';
+            anchor.click();
+            URL.revokeObjectURL(url);
+            showToast('Data downloaded.', 'success');
+        }
+
+        async function deleteAccount() {
+            if (!confirm('Are you sure you want to delete your local account data? This cannot be undone.')) return;
+
+            const user = safeParseObject(localStorage.getItem('erayaUser'));
+            const users = safeParseObject(localStorage.getItem('erayaUsers'));
+            if (user.email && users[user.email]) {
+                delete users[user.email];
+            }
+            setStoredObject('erayaUsers', users);
+            localStorage.removeItem('erayaUser');
+            localStorage.removeItem('userData');
+
+            try {
+                await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+            } catch (_err) {
+                // Non-fatal for local cleanup.
+            }
+
+            window.location.href = 'login.html';
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.style.cssText =
+                'position:fixed;top:24px;right:24px;background:' +
+                (type === 'error' ? '#FF6B9D' : '#4ECDC4') +
+                ';color:white;padding:14px 22px;border-radius:12px;font-weight:600;z-index:9999;font-size:15px;box-shadow:0 4px 16px rgba(0,0,0,0.2);';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                if (toast.parentNode) toast.remove();
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

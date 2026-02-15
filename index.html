@@ -11,7 +11,7 @@
         <!-- Left Sidebar Navigation -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="logo.png" alt="Eraya Logo" class="logo-image">
+                <img src="images/logo.png" alt="Eraya Logo" class="logo-image">
             </div>
             
             <nav class="nav-menu">
@@ -65,7 +65,7 @@
                     <span>Profile</span>
                 </a>
             </nav>
-            <div id="auth-status" style="margin-top: auto; padding: 16px 0; font-size: 14px;"></div>
+            <div id="auth-status" style="margin-top:auto;padding:16px 0;font-size:14px;"></div>
         </aside>
 
         <!-- Main Content Area -->
@@ -76,7 +76,7 @@
                     <h1>Welcome<br>back, User</h1>
                 </div>
                 <div class="welcome-illustration">
-                    <img src="holding-flowers.png" alt="Welcome illustration">
+                    <img src="images/holding-flowers.png" alt="Welcome illustration">
                 </div>
             </div>
 
@@ -84,21 +84,21 @@
             <div class="feature-cards">
                 <div class="card">
                     <div class="card-illustration">
-                        <img src="workout.png" alt="Workout">
+                        <img src="images/workout.png" alt="Workout">
                     </div>
                     <h3>Find Workouts</h3>
                 </div>
 
                 <div class="card">
                     <div class="card-illustration">
-                        <img src="meditation.png" alt="Period Pain Relief">
+                        <img src="images/meditation.png" alt="Period Pain Relief">
                     </div>
                     <h3>Period Pain Relief</h3>
                 </div>
 
                 <div class="card">
                     <div class="card-illustration">
-                        <img src="food.png" alt="Food">
+                        <img src="images/breakfast.png" alt="Food">
                     </div>
                     <h3>What food to eat<br>during your cycle?</h3>
                 </div>
@@ -115,14 +115,14 @@
             <div class="bottom-cards">
                 <div class="card-large">
                     <div class="card-illustration">
-                        <img src="doctors.png" alt="Doctors">
+                        <img src="images/doctors.png" alt="Doctors">
                     </div>
                     <h3>Find<br>experts<br>near you</h3>
                 </div>
 
                 <div class="card-large">
                     <div class="card-illustration">
-                        <img src="focused.png" alt="Learn">
+                        <img src="images/focused.png" alt="Learn">
                     </div>
                     <h3>Learn more<br>about<br>Menstrual<br>Health</h3>
                 </div>
@@ -208,6 +208,45 @@
 
     <script src="auth.js"></script>
     <script src="script.js"></script>
-    <script>if (window.ErayaAuth) ErayaAuth.renderAuthStatus('auth-status');</script>
+    <script>
+        (function() {
+            function safeParseObject(rawValue) {
+                if (!rawValue) return {};
+                try {
+                    const parsed = JSON.parse(rawValue);
+                    return parsed && typeof parsed === 'object' ? parsed : {};
+                } catch (_err) {
+                    return {};
+                }
+            }
+
+            function setWelcomeName(name) {
+                const heading = document.querySelector('.welcome-text h1');
+                if (!heading) return;
+                const safeName = String(name || 'User');
+                heading.innerHTML = 'Welcome<br>back, ' + safeName;
+            }
+
+            const localUser = safeParseObject(localStorage.getItem('erayaUser'));
+            if (localUser.name) {
+                setWelcomeName(localUser.name);
+            }
+
+            if (window.ErayaAuth) {
+                window.ErayaAuth.renderAuthStatus('auth-status');
+                window.ErayaAuth.getCurrentUser().then(function(user) {
+                    if (user && user.name) {
+                        setWelcomeName(user.name);
+                        localStorage.setItem('erayaUser', JSON.stringify({
+                            email: user.email,
+                            name: user.name
+                        }));
+                    }
+                }).catch(function() {
+                    // Keep local fallback name only.
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

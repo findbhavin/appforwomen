@@ -5,177 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eraya - Profile</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .page-container {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            min-height: 100vh;
-        }
-
-        .profile-content {
-            padding: 40px;
-            background-color: var(--lavender-blush);
-        }
-
-        .profile-header-section {
-            background: linear-gradient(135deg, var(--powder-pink) 0%, var(--medium-pink) 100%);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            background-color: var(--white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-        }
-
-        .profile-info {
-            flex: 1;
-            color: var(--white);
-        }
-
-        .profile-info h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .profile-info p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .edit-profile-btn {
-            padding: 12px 28px;
-            background-color: var(--white);
-            color: var(--blush);
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .info-card {
-            background-color: var(--white);
-            border-radius: 20px;
-            padding: 30px;
-        }
-
-        .info-card h3 {
-            font-size: 20px;
-            color: var(--dark-text);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--lavender-blush);
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--lavender-blush);
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-size: 14px;
-            color: var(--light-text);
-        }
-
-        .info-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark-text);
-        }
-    </style>
 </head>
 <body>
     <div class="page-container">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="logo.png" alt="Eraya Logo" class="logo-image">
+                <img src="images/logo.png" alt="Eraya Logo" class="logo-image">
             </div>
-            
             <nav class="nav-menu">
                 <a href="index.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Dashboard</span>
                 </a>
                 <a href="wellness.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Wellness</span>
                 </a>
                 <a href="doctors.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Doctors</span>
                 </a>
                 <a href="mycycle.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>My Cycle</span>
                 </a>
                 <a href="settings.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Settings</span>
                 </a>
                 <a href="profile.html" class="nav-item active">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Profile</span>
-                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"/></svg>
                 </a>
             </nav>
         </aside>
 
-        <div class="profile-content">
-            <div class="profile-header-section">
-                <div class="profile-avatar">👤</div>
-                <div class="profile-info">
-                    <h1>User Profile</h1>
-                    <p>Member since January 2026</p>
-                </div>
-                <button class="edit-profile-btn">Edit Profile</button>
+        <!-- Profile Content -->
+        <div class="profile-main">
+
+            <!-- Profile Top -->
+            <div class="profile-top">
+                <div class="profile-avatar-large">👤</div>
+                <h2 id="profileName">User Name</h2>
+                <p id="profileSince">Member since January 2026</p>
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
+            <!-- Stats Row -->
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">🔄</div>
+                    <div class="stat-num">12</div>
+                    <div class="stat-lbl">Cycles tracked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌸</div>
+                    <div class="stat-num">48</div>
+                    <div class="stat-lbl">Activities completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏥</div>
+                    <div class="stat-num">5</div>
+                    <div class="stat-lbl">Doctor visits</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-num">30</div>
+                    <div class="stat-lbl">Day streak</div>
+                </div>
+            </div>
+
+            <!-- Info Grid -->
+            <div class="profile-info-grid">
+                <div class="info-card-profile">
                     <h3>Personal Information</h3>
                     <div class="info-row">
                         <span class="info-label">Full Name</span>
-                        <span class="info-value">User Name</span>
+                        <span class="info-value" id="piName">User Name</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Email</span>
-                        <span class="info-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ce9eff9eedcf9e4fdf1ecf0f9b2fff3f1">[email&#160;protected]</a></span>
+                        <span class="info-value" id="piEmail">user@eraya.com</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Date of Birth</span>
@@ -183,19 +94,19 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Location</span>
-                        <span class="info-value">KÄtpÄdi, Tamil Nadu</span>
+                        <span class="info-value">Kātpādi, Tamil Nadu</span>
                     </div>
                 </div>
 
-                <div class="info-card">
+                <div class="info-card-profile">
                     <h3>Health Information</h3>
                     <div class="info-row">
                         <span class="info-label">Height</span>
-                        <span class="info-value">165 cm</span>
+                        <span class="info-value" id="piHeight">165 cm</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Weight</span>
-                        <span class="info-value">60 kg</span>
+                        <span class="info-value" id="piWeight">60 kg</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Blood Type</span>
@@ -207,19 +118,19 @@
                     </div>
                 </div>
 
-                <div class="info-card">
+                <div class="info-card-profile">
                     <h3>Cycle Statistics</h3>
                     <div class="info-row">
                         <span class="info-label">Average Cycle</span>
-                        <span class="info-value">28 days</span>
+                        <span class="info-value" id="piCycle">28 days</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Average Period</span>
-                        <span class="info-value">5 days</span>
+                        <span class="info-value" id="piPeriod">5 days</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Last Period</span>
-                        <span class="info-value">Feb 2, 2026</span>
+                        <span class="info-value" id="piLastPeriod">Feb 2, 2026</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Cycles Tracked</span>
@@ -227,7 +138,103 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Achievements -->
+            <div class="achievements-section">
+                <h3>Your Achievements</h3>
+                <div class="achievements-grid">
+                    <div class="achievement-card">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-name">Consistent Tracker</div>
+                        <div class="achievement-desc">Logged for 30 days straight</div>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon">💪</div>
+                        <div class="achievement-name">Wellness Warrior</div>
+                        <div class="achievement-desc">Completed 50 activities</div>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon">⭐</div>
+                        <div class="achievement-name">Health First</div>
+                        <div class="achievement-desc">Attended 5 appointments</div>
+                    </div>
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon">🔒</div>
+                        <div class="achievement-name">100 Day Streak</div>
+                        <div class="achievement-desc">Unlock by logging 100 days</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        function safeParseObject(rawValue) {
+            if (!rawValue) return {};
+            try {
+                const parsed = JSON.parse(rawValue);
+                return parsed && typeof parsed === 'object' ? parsed : {};
+            } catch (_err) {
+                return {};
+            }
+        }
+
+        function setText(id, value) {
+            const element = document.getElementById(id);
+            if (element && value !== undefined && value !== null && value !== '') {
+                element.textContent = String(value);
+            }
+        }
+
+        async function fetchSessionUser() {
+            try {
+                const response = await fetch('/api/me', { credentials: 'include' });
+                const data = await response.json();
+                return data && data.user ? data.user : null;
+            } catch (_err) {
+                return null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const localUser = safeParseObject(localStorage.getItem('erayaUser'));
+            const userData = safeParseObject(localStorage.getItem('userData'));
+            const sessionUser = await fetchSessionUser();
+
+            const effectiveUser = sessionUser && sessionUser.email
+                ? { name: sessionUser.name || sessionUser.email.split('@')[0], email: sessionUser.email }
+                : localUser;
+
+            if (!effectiveUser || (!effectiveUser.name && !effectiveUser.email)) {
+                window.location.href = 'login.html?next=' + encodeURIComponent('profile.html');
+                return;
+            }
+
+            if (effectiveUser.email) {
+                localStorage.setItem('erayaUser', JSON.stringify(effectiveUser));
+            }
+
+            setText('profileName', effectiveUser.name || 'User');
+            setText('piName', effectiveUser.name || 'User');
+            setText('piEmail', effectiveUser.email || 'user@eraya.com');
+
+            if (userData.height) setText('piHeight', userData.height + ' cm');
+            if (userData.weight) setText('piWeight', userData.weight + ' kg');
+            if (userData.cycleLength) setText('piCycle', userData.cycleLength + ' days');
+            if (userData.periodLength) setText('piPeriod', userData.periodLength + ' days');
+
+            if (userData.lastPeriod) {
+                const date = new Date(userData.lastPeriod);
+                if (!Number.isNaN(date.getTime())) {
+                    setText('piLastPeriod', date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }));
+                }
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,150 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eraya - Login</title>
+    <title>Eraya - Login / Sign Up</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .auth-page { min-height: 100vh; background: var(--lavender-blush); display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .auth-box { background: var(--white); border-radius: 24px; padding: 40px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(207, 116, 134, 0.15); }
-        .auth-box h1 { font-size: 28px; color: var(--dark-text); margin-bottom: 8px; }
-        .auth-box p { color: var(--light-text); margin-bottom: 24px; font-size: 14px; }
-        .auth-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid var(--lavender-blush); }
-        .auth-tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 600; color: var(--light-text); border: none; background: none; font-size: 15px; }
-        .auth-tab.active { color: var(--blush); border-bottom: 2px solid var(--blush); margin-bottom: -2px; }
-        .auth-form { display: none; }
-        .auth-form.active { display: block; }
-        .auth-form .form-group { margin-bottom: 18px; }
-        .auth-form label { display: block; font-size: 14px; font-weight: 600; color: var(--dark-text); margin-bottom: 6px; }
-        .auth-form input { width: 100%; padding: 12px 14px; border: 2px solid var(--light-pink); border-radius: 12px; font-size: 15px; box-sizing: border-box; }
-        .auth-form input:focus { outline: none; border-color: var(--blush); }
-        .auth-btn { width: 100%; padding: 14px; background: var(--blush); color: var(--white); border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px; }
-        .auth-btn:hover { background: #b86474; }
-        .auth-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-        .auth-error { color: #c00; font-size: 14px; margin-top: 12px; }
-        .auth-footer { text-align: center; margin-top: 24px; }
-        .auth-footer a { color: var(--blush); text-decoration: none; font-weight: 600; }
-        .auth-footer a:hover { text-decoration: underline; }
-    </style>
 </head>
-<body>
-    <div class="auth-page">
-        <div class="auth-box">
-            <h1>Eraya</h1>
-            <p>Sign in or create an account to save your data.</p>
-            <div class="auth-tabs">
-                <button type="button" class="auth-tab active" data-tab="login">Login</button>
-                <button type="button" class="auth-tab" data-tab="register">Register</button>
+<body class="auth-body">
+
+    <!-- LOGIN PANEL -->
+    <div class="auth-card" id="loginPanel">
+        <div class="auth-form-side">
+            <div class="auth-brand">
+                <img src="images/logo.png" alt="Eraya Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+                <span style="display:none">Eraya</span>
             </div>
-            <form id="loginForm" class="auth-form active">
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required placeholder="you@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="auth-btn" id="loginBtn">Sign in</button>
-                <div id="loginError" class="auth-error"></div>
-            </form>
-            <form id="registerForm" class="auth-form">
-                <div class="form-group">
-                    <label for="regName">Name</label>
-                    <input type="text" id="regName" required placeholder="Your name">
-                </div>
-                <div class="form-group">
-                    <label for="regEmail">Email</label>
-                    <input type="email" id="regEmail" required placeholder="you@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" required placeholder="••••••••" minlength="6">
-                </div>
-                <button type="submit" class="auth-btn" id="registerBtn">Create account</button>
-                <div id="registerError" class="auth-error"></div>
-            </form>
-            <div class="auth-footer">
-                <a href="index.html">← Back to app</a>
+            <h2>Welcome to ERAYA</h2>
+            <p>Your personalized menstrual wellness companion</p>
+
+            <div class="auth-field">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="auth-field">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <div class="auth-row">
+                <label><input type="checkbox" id="rememberMe"> Remember me</label>
+                <a href="#" class="auth-forgot">Forgot password?</a>
+            </div>
+            <button id="loginBtn" class="auth-btn" type="button" onclick="handleLogin()">Login</button>
+            <div class="auth-switch">
+                Don't have an account? <a onclick="showSignup()">Sign up</a>
             </div>
         </div>
+        <div class="auth-illustration-side">
+            <img src="images/holding-flowers.png" alt="Wellness illustration" onerror="this.style.opacity='0'">
+            <h3>Track Your Wellness</h3>
+            <p>Understand your cycle, empower your health journey</p>
+        </div>
     </div>
-    <script>
-        (function() {
-            var loginForm = document.getElementById('loginForm');
-            var registerForm = document.getElementById('registerForm');
-            var loginError = document.getElementById('loginError');
-            var registerError = document.getElementById('registerError');
-            var tabs = document.querySelectorAll('.auth-tab');
-            var forms = document.querySelectorAll('.auth-form');
 
-            tabs.forEach(function(t) {
-                t.addEventListener('click', function() {
-                    var tab = this.getAttribute('data-tab');
-                    tabs.forEach(function(x) { x.classList.remove('active'); });
-                    forms.forEach(function(f) { f.classList.remove('active'); });
-                    this.classList.add('active');
-                    document.getElementById(tab === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
-                    loginError.textContent = '';
-                    registerError.textContent = '';
-                });
+    <!-- SIGNUP PANEL -->
+    <div class="auth-card auth-hidden" id="signupPanel">
+        <div class="auth-form-side">
+            <div class="auth-brand">
+                <img src="images/logo.png" alt="Eraya Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+                <span style="display:none">Eraya</span>
+            </div>
+            <h2>Create Account</h2>
+            <p>Start your wellness journey today</p>
+
+            <div class="auth-field">
+                <label for="signupName">Full Name</label>
+                <input type="text" id="signupName" placeholder="Your full name">
+            </div>
+            <div class="auth-field">
+                <label for="signupEmail">Email Address</label>
+                <input type="email" id="signupEmail" placeholder="your@email.com">
+            </div>
+            <div class="auth-field">
+                <label for="signupPassword">Password</label>
+                <input type="password" id="signupPassword" placeholder="Create a password (min 6 chars)">
+            </div>
+            <div class="auth-field">
+                <label for="signupConfirm">Confirm Password</label>
+                <input type="password" id="signupConfirm" placeholder="Confirm your password">
+            </div>
+            <button id="signupBtn" class="auth-btn" type="button" onclick="handleSignup()">Create Account</button>
+            <div class="auth-switch">
+                Already have an account? <a onclick="showLogin()">Login</a>
+            </div>
+        </div>
+        <div class="auth-illustration-side">
+            <img src="images/holding-flowers.png" alt="Wellness illustration" onerror="this.style.opacity='0'">
+            <h3>Join ERAYA</h3>
+            <p>Thousands of women trust ERAYA for their wellness journey</p>
+        </div>
+    </div>
+
+    <script>
+        function safeParseObject(rawValue) {
+            if (!rawValue) return {};
+            try {
+                const parsed = JSON.parse(rawValue);
+                return parsed && typeof parsed === 'object' ? parsed : {};
+            } catch (_err) {
+                return {};
+            }
+        }
+
+        function getNextPath(defaultPath) {
+            const params = new URLSearchParams(window.location.search);
+            const next = params.get('next');
+            if (!next) return defaultPath;
+            // Allow only same-origin relative navigation.
+            if (next.startsWith('http://') || next.startsWith('https://') || next.startsWith('//')) {
+                return defaultPath;
+            }
+            return next;
+        }
+
+        function setButtonBusy(buttonId, busy) {
+            const button = document.getElementById(buttonId);
+            if (!button) return;
+            button.disabled = busy;
+            button.style.opacity = busy ? '0.75' : '1';
+            button.style.cursor = busy ? 'not-allowed' : '';
+        }
+
+        async function callApi(url, method, payload) {
+            const response = await fetch(url, {
+                method: method,
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload || {})
             });
 
-            function api(url, method, body) {
-                return fetch(url, {
-                    method: method || 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: body ? JSON.stringify(body) : undefined
-                });
+            let data = {};
+            try {
+                data = await response.json();
+            } catch (_err) {
+                data = {};
             }
 
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                loginError.textContent = '';
-                var btn = document.getElementById('loginBtn');
-                btn.disabled = true;
-                api('/api/login', 'POST', {
-                    email: document.getElementById('loginEmail').value,
-                    password: document.getElementById('loginPassword').value
-                }).then(function(r) {
-                    return r.json().then(function(data) {
-                        if (r.ok) {
-                            window.location.href = document.referrer && !document.referrer.includes('login') ? document.referrer : 'index.html';
-                        } else {
-                            loginError.textContent = data.error || 'Login failed';
-                        }
-                    });
-                }).catch(function() {
-                    loginError.textContent = 'Network error. Try again.';
-                }).finally(function() {
-                    btn.disabled = false;
-                });
-            });
+            if (!response.ok) {
+                throw new Error(data.error || 'Request failed. Please try again.');
+            }
+            return data;
+        }
 
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                registerError.textContent = '';
-                var btn = document.getElementById('registerBtn');
-                btn.disabled = true;
-                api('/api/register', 'POST', {
-                    name: document.getElementById('regName').value,
-                    email: document.getElementById('regEmail').value,
-                    password: document.getElementById('regPassword').value
-                }).then(function(r) {
-                    return r.json().then(function(data) {
-                        if (r.ok) {
-                            window.location.href = 'index.html';
-                        } else {
-                            registerError.textContent = data.error || 'Registration failed';
-                        }
-                    });
-                }).catch(function() {
-                    registerError.textContent = 'Network error. Try again.';
-                }).finally(function() {
-                    btn.disabled = false;
+        function syncLocalUser(user, isNewSignup) {
+            if (!user || !user.email) return;
+
+            const normalized = {
+                email: user.email,
+                name: user.name || user.email.split('@')[0]
+            };
+            localStorage.setItem('erayaUser', JSON.stringify(normalized));
+
+            const users = safeParseObject(localStorage.getItem('erayaUsers'));
+            const existing = users[normalized.email] || {};
+            const setupDone = isNewSignup ? false : Boolean(existing.setupDone);
+            users[normalized.email] = {
+                ...existing,
+                email: normalized.email,
+                name: normalized.name,
+                setupDone: setupDone
+            };
+            localStorage.setItem('erayaUsers', JSON.stringify(users));
+        }
+
+        function showSignup() {
+            document.getElementById('loginPanel').classList.add('auth-hidden');
+            document.getElementById('signupPanel').classList.remove('auth-hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signupPanel').classList.add('auth-hidden');
+            document.getElementById('loginPanel').classList.remove('auth-hidden');
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            setButtonBusy('loginBtn', true);
+            try {
+                const data = await callApi('/api/login', 'POST', {
+                    email: email,
+                    password: password
                 });
-            });
+                syncLocalUser(data.user || { email: email }, false);
+                showToast('Welcome back!', 'success');
+                setTimeout(function() {
+                    window.location.href = getNextPath('index.html');
+                }, 900);
+            } catch (err) {
+                showToast(err.message || 'Login failed', 'error');
+            } finally {
+                setButtonBusy('loginBtn', false);
+            }
+        }
+
+        async function handleSignup() {
+            const name     = document.getElementById('signupName').value.trim();
+            const email    = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirm  = document.getElementById('signupConfirm').value;
+
+            if (!name || !email || !password || !confirm) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            if (password !== confirm) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+
+            setButtonBusy('signupBtn', true);
+            try {
+                const data = await callApi('/api/register', 'POST', {
+                    name: name,
+                    email: email,
+                    password: password
+                });
+                syncLocalUser(data.user || { email: email, name: name }, true);
+                showToast('Account created! Let us set up your profile.', 'success');
+                setTimeout(function() {
+                    window.location.href = 'setup.html';
+                }, 900);
+            } catch (err) {
+                showToast(err.message || 'Registration failed', 'error');
+            } finally {
+                setButtonBusy('signupBtn', false);
+            }
+        }
+
+        function showToast(message, type) {
+            const existing = document.querySelector('.auth-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'auth-toast';
+            toast.style.cssText =
+                'position:fixed;top:24px;right:24px;' +
+                'background:' + (type === 'error' ? '#FF6B9D' : '#4ECDC4') + ';' +
+                'color:white;padding:14px 22px;border-radius:12px;font-size:15px;' +
+                'font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,0.2);z-index:99999;';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(function() { if (toast.parentNode) toast.remove(); }, 3500);
+        }
+
+        (function hydratePrefill() {
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail) {
+                const emailInput = document.getElementById('loginEmail');
+                const rememberMe = document.getElementById('rememberMe');
+                if (emailInput) emailInput.value = rememberedEmail;
+                if (rememberMe) rememberMe.checked = true;
+            }
         })();
+
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const rememberMe = document.getElementById('rememberMe');
+            const emailInput = document.getElementById('loginEmail');
+            if (rememberMe && emailInput) {
+                if (rememberMe.checked && emailInput.value.trim()) {
+                    localStorage.setItem('rememberedEmail', emailInput.value.trim());
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+            }
+        });
     </script>
 </body>
 </html>
