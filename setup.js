@@ -45,11 +45,15 @@ function upsertLocalUser(user, keepSetupState) {
 
     const users = getStoredObject('erayaUsers');
     const existing = users[normalized.email] || {};
+    const globalProfile = getStoredObject('userData');
+    const inferredSetupDone =
+        Boolean(existing.setupDone) ||
+        (globalProfile && globalProfile.email === normalized.email && Boolean(globalProfile.setupComplete));
     users[normalized.email] = {
         ...existing,
         email: normalized.email,
         name: normalized.name,
-        setupDone: keepSetupState ? Boolean(existing.setupDone) : Boolean(existing.setupDone)
+        setupDone: keepSetupState ? inferredSetupDone : false
     };
     saveStoredObject('erayaUsers', users);
 }
@@ -80,6 +84,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     const users = getStoredObject('erayaUsers');
+    const profileByEmail = getStoredObject('userDataByEmail');
+    if (
+        activeUser.email &&
+        profileByEmail[activeUser.email] &&
+        profileByEmail[activeUser.email].setupComplete &&
+        (!users[activeUser.email] || !users[activeUser.email].setupDone)
+    ) {
+        users[activeUser.email] = {
+            ...(users[activeUser.email] || {}),
+            email: activeUser.email,
+            name: activeUser.name,
+            setupDone: true,
+            profile: profileByEmail[activeUser.email]
+        };
+        saveStoredObject('erayaUsers', users);
+    }
     if (users[activeUser.email] && users[activeUser.email].setupDone) {
         window.location.href = 'index.html';
         return;
@@ -207,6 +227,7 @@ function handleSubmit(event) {
     const users = getStoredObject('erayaUsers');
     const email = activeUser && activeUser.email ? activeUser.email : '';
     if (email) {
+        data.email = email;
         users[email] = {
             ...(users[email] || {}),
             email: email,
@@ -216,6 +237,10 @@ function handleSubmit(event) {
         };
         saveStoredObject('erayaUsers', users);
         saveStoredObject('erayaUser', { email: email, name: users[email].name });
+
+        const userDataByEmail = getStoredObject('userDataByEmail');
+        userDataByEmail[email] = data;
+        saveStoredObject('userDataByEmail', userDataByEmail);
     }
 
     showSuccessAnimation();

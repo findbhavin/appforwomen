@@ -142,7 +142,11 @@
 
             const users = safeParseObject(localStorage.getItem('erayaUsers'));
             const existing = users[normalized.email] || {};
-            const setupDone = isNewSignup ? false : Boolean(existing.setupDone);
+            const storedProfile = safeParseObject(localStorage.getItem('userData'));
+            const inferredSetupDone =
+                Boolean(existing.setupDone) ||
+                (storedProfile && storedProfile.email === normalized.email && Boolean(storedProfile.setupComplete));
+            const setupDone = isNewSignup ? false : inferredSetupDone;
             users[normalized.email] = {
                 ...existing,
                 email: normalized.email,
@@ -163,6 +167,9 @@
         }
 
         async function handleLogin() {
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn && loginBtn.disabled) return;
+
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
@@ -177,7 +184,11 @@
                     email: email,
                     password: password
                 });
-                syncLocalUser(data.user || { email: email }, false);
+                const user = data && data.user ? data.user : null;
+                if (!user || !user.email) {
+                    throw new Error('Login succeeded but user session was invalid.');
+                }
+                syncLocalUser(user, false);
                 showToast('Welcome back!', 'success');
                 setTimeout(function() {
                     window.location.href = getNextPath('index.html');
@@ -190,6 +201,9 @@
         }
 
         async function handleSignup() {
+            const signupBtn = document.getElementById('signupBtn');
+            if (signupBtn && signupBtn.disabled) return;
+
             const name     = document.getElementById('signupName').value.trim();
             const email    = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
@@ -215,7 +229,8 @@
                     email: email,
                     password: password
                 });
-                syncLocalUser(data.user || { email: email, name: name }, true);
+                const user = data && data.user ? data.user : { email: email, name: name };
+                syncLocalUser(user, true);
                 showToast('Account created! Let us set up your profile.', 'success');
                 setTimeout(function() {
                     window.location.href = 'setup.html';
@@ -263,6 +278,28 @@
                     localStorage.removeItem('rememberedEmail');
                 }
             }
+        });
+
+        ['loginEmail', 'loginPassword'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleLogin();
+                }
+            });
+        });
+
+        ['signupName', 'signupEmail', 'signupPassword', 'signupConfirm'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleSignup();
+                }
+            });
         });
     </script>
 </body>
