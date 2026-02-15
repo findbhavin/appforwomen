@@ -26,12 +26,16 @@ function saveStoredObject(key, value) {
 }
 
 async function fetchSessionUser() {
+    const controller = new AbortController();
+    const timer = setTimeout(function() { controller.abort(); }, 6000);
     try {
-        const response = await fetch('/api/me', { credentials: 'include' });
+        const response = await fetch('/api/me', { credentials: 'include', signal: controller.signal });
         const data = await response.json();
         return data && data.user ? data.user : null;
     } catch (_err) {
         return null;
+    } finally {
+        clearTimeout(timer);
     }
 }
 

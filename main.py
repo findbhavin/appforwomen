@@ -5,12 +5,26 @@ Flask app: API (auth, appointments, symptoms) + static file serving.
 import os
 from flask import Flask, send_from_directory, request, jsonify, session
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+# Disable Flask's built-in static route so our custom file serving logic controls caching.
+app = Flask(__name__, static_folder=None)
 app.secret_key = os.environ.get('SECRET_KEY', 'eraya-dev-secret-change-in-production')
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # No CORS: app serves HTML and API from same origin. (flask-cors removed to avoid TypeError.)
+
+STATIC_ASSET_EXTENSIONS = {
+    '.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico',
+    '.woff', '.woff2', '.ttf', '.eot'
+}
+
+
+def static_max_age(path):
+    """Use cache for static assets; keep HTML uncached for fresh releases."""
+    ext = os.path.splitext(path)[1].lower()
+    if ext in STATIC_ASSET_EXTENSIONS:
+        return 86400  # 24 hours
+    return 0
 
 import db
 db.init_db()
@@ -135,7 +149,13 @@ def api_symptoms_create():
 # ---------- Static files (must be last) ----------
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory('.', 'index.html', max_age=0)
+
+
+@app.route('/healthz')
+def healthz():
+    """Liveness endpoint for deployment diagnostics."""
+    return jsonify({'ok': True})
 
 
 @app.route('/favicon.ico')
@@ -152,9 +172,9 @@ def serve(path):
     if path.startswith('api/'):
         return jsonify({'error': 'Not found'}), 404
     if os.path.isfile(path):
-        return send_from_directory('.', path)
+        return send_from_directory('.', path, max_age=static_max_age(path))
     if os.path.isfile(path + '.html'):
-        return send_from_directory('.', path + '.html')
+        return send_from_directory('.', path + '.html', max_age=0)
     return send_from_directory('.', path)
 
 
