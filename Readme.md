@@ -1,129 +1,166 @@
-# ERAYA - Period Wellness Website
+# ERAYA - Period Wellness App (Flask + Static Frontend)
 
-A comprehensive period wellness website designed to help women track their menstrual cycles, find healthcare experts, access wellness resources, and manage their reproductive health.
+ERAYA is a menstrual wellness web app with a Flask backend and a multi-page frontend.  
+It includes authentication, doctor appointment booking, symptom logging, onboarding setup, wellness tools, and profile/settings pages.
 
-## 🌸 Project Overview
+---
 
-ERAYA is a desktop-centric wellness platform built with modern web technologies, featuring an enhanced doctors page with full contact and booking functionality.
+## What was merged in this update
 
-## ✨ Key Features
+This repository now includes the updated frontend package (dashboard/page redesign, setup flow, wellness and symptoms upgrades) while **keeping the backend API and storage intact**.
 
-### Enhanced Doctors Page (NEW)
-- **Search & Filter**: Find doctors by name, specialty, location, or hospital
-- **Detailed Doctor Cards**: Ratings, experience, fees, availability status
-- **Contact System**: Direct phone/email with contact modals
-- **Booking System**: Complete appointment booking with form validation
-- **Emergency Contact**: Quick access to emergency services
+### Functional changes merged
 
-### Dashboard
-- Interactive calendar with cycle tracking
-- Symptom logging
-- Wellness insights
-- Cycle phase tracking
+- Added onboarding pages:
+  - `setup.html`
+  - `setup.js`
+- Added dedicated client scripts:
+  - `symptoms.js` (enhanced symptom chip tracking + API sync + local fallback)
+  - `wellness.js` (quotes, tips, nutrition tabs, meditation timer, hydration tracker)
+- Updated major pages/UI:
+  - `index.html`, `login.html`, `profile.html`, `settings.html`, `symptoms.html`, `wellness.html`
+  - `styles.css` expanded with page-specific styling blocks
+- Added image assets under:
+  - `images/`
 
-### Other Pages
-- Wellness Hub with exercises and nutrition
-- Cycle tracker with predictions
-- Symptom logger
-- Settings and profile management
+### Robustness improvements added during merge
 
-## 🎨 Color Palette (From Figma)
+- Preserved Flask API auth flow (`/api/login`, `/api/register`, `/api/me`) from frontend.
+- Added defensive JSON parsing for localStorage (`safeParseObject`) in updated scripts.
+- Added null/DOM guards to avoid runtime errors when elements are missing.
+- Added graceful network fallback behavior:
+  - Symptoms save to localStorage even if API is unavailable.
+  - Wellness content falls back to local tips/quotes when external APIs fail.
+- Kept appointments booking API behavior intact in `doctors.js` (`/api/appointments`).
 
-- Lavender Blush: #FFE6ED
-- Blush: #CF7486
-- Powder Pink: #F8BBD0
-- Milky White: #FFF8F0
+---
 
-## 📁 Files
+## Architecture
 
-- index.html - Dashboard
-- doctors.html - Find Doctors (ENHANCED)
-- doctors.js - Doctors functionality (NEW)
-- wellness.html - Wellness Hub
-- mycycle.html - Cycle Tracker
-- symptoms.html - Symptom Logger
-- settings.html - Settings
-- profile.html - Profile
-- styles.css - Complete stylesheet
-- script.js - Dashboard scripts
+### Backend
 
-## 🔐 Server-side features (Login, Booking, Symptoms)
+- **Flask app**: `main.py`
+- **SQLite data layer**: `db.py`
+- Session-based auth via secure cookies.
+- Backend endpoints serve both API and static frontend files.
 
-The app includes a **Flask backend** with SQLite for:
+### Frontend
 
-- **User login** – Register and sign in at `login.html`; session cookies keep you logged in.
-- **Doctor appointment booking** – Bookings from the Doctors page are stored (login required).
-- **Symptoms page** – Symptom logs are saved and loaded by date (login required).
+- Static HTML/CSS/JS pages served from Flask.
+- `auth.js` helper for current user/session status on pages that use it.
+- Some UX state (settings/profile/setup/wellness counters) stored in localStorage.
+- Critical actions (login/register/appointments/symptoms) remain API-backed.
 
-**Run the server** so these work: `python main.py` then open http://localhost:8080 (do not open HTML files directly).  
-See **BACKEND-GUIDANCE.md** for technology choices and API details.
+---
 
-## 🚀 Usage (local)
+## Core API endpoints
 
-1. Run the server: `pip install -r requirements.txt` then `python main.py`. Visit http://localhost:8080
-2. Optionally register/login via the **Login** link in the sidebar (or open `login.html`)
-3. Navigate to Doctors → search/filter → Book Appointment (saved when logged in)
-4. Add Symptoms from the dashboard button; logs are saved when logged in
+### Auth
 
-## ☁️ Deploy on Google Cloud (App Engine)
+- `POST /api/register` -> create account and login session
+- `POST /api/login` -> login
+- `POST /api/logout` -> logout
+- `GET /api/me` -> current user
 
-1. **Install Google Cloud CLI**  
-   [Install gcloud](https://cloud.google.com/sdk/docs/install)
+### Appointments
 
-2. **Login and set project**
-   ```bash
-   gcloud auth login
-   gcloud config set project YOUR_PROJECT_ID
-   ```
+- `GET /api/appointments` -> list appointments for logged-in user
+- `POST /api/appointments` -> create appointment
 
-3. **Deploy** (from the project folder)
-   ```bash
-   gcloud app deploy
-   ```
-   Accept prompts (e.g. region). When finished, the app URL will be shown (e.g. `https://YOUR_PROJECT_ID.uc.r.appspot.com`).
+### Symptoms
 
-4. **Optional: run locally with App Engine**
-   ```bash
-   pip install -r requirements.txt
-   python main.py
-   ```
-   Then open http://localhost:8080
+- `GET /api/symptoms?date=YYYY-MM-DD` -> single-day symptom log
+- `GET /api/symptoms` -> recent logs
+- `POST /api/symptoms` -> save symptom log
 
-## 🐳 Single-container deploy (Docker)
+For endpoint-level implementation details, see:
+- `main.py`
+- `db.py`
+- `BACKEND-GUIDANCE.md`
 
-One image runs the **full app**: Flask backend (API + auth, appointments, symptoms, SQLite) and static frontend (HTML/CSS/JS). Use the single **Dockerfile** in the project root.
+---
+
+## Key pages and behavior
+
+- `index.html`: dashboard + auth status + quick navigation
+- `login.html`: login/register using backend API, then onboarding redirect for new signups
+- `setup.html`: 3-step profile and cycle setup
+- `doctors.html` + `doctors.js`: searchable doctor directory, contact modal, appointment booking
+- `symptoms.html` + `symptoms.js`: detailed chip-based symptom tracking, API sync + local fallback
+- `wellness.html` + `wellness.js`: quote feed, wellness tips, exercise modal, nutrition tabs, meditation timer
+- `settings.html`: profile/cycle preferences (local storage), export data, local account cleanup
+- `profile.html`: user/profile readout from session + local profile data
+
+---
+
+## Local development
+
+### Prerequisites
+
+- Python 3.10+
+- pip
 
 ### Run locally
-   ```bash
-   docker build -t eraya .
-   docker run -p 8080:8080 eraya
-   ```
-   Open http://localhost:8080 (login, booking, and symptoms all work; data is stored in the container’s SQLite DB).
 
-### Deploy to Google Cloud Run (from the project folder)
-   ```bash
-   gcloud run deploy eraya --source . --region us-central1 --allow-unauthenticated
-   ```
-   Cloud Run will build the image from the Dockerfile and deploy. The command prints the live URL (e.g. `https://eraya-xxxxx-uc.a.run.app`).
+```bash
+pip install -r requirements.txt
+python3 main.py
+```
 
-   Or build the image first and push to Artifact Registry, then deploy:
-   ```bash
-   gcloud auth configure-docker
-   docker build -t gcr.io/YOUR_PROJECT_ID/eraya .
-   docker push gcr.io/YOUR_PROJECT_ID/eraya
-   gcloud run deploy eraya --image gcr.io/YOUR_PROJECT_ID/eraya --region us-central1 --allow-unauthenticated
-   ```
+Open:
+- http://localhost:8080
 
-**Note:** Add image assets (`logo.png`, `holding-flowers.png`, `workout.png`, `meditation.png`, `food.png`, `doctors.png`, `focused.png`) to the project folder if you want them to appear on the dashboard.
+> Important: open through Flask server, not by directly opening HTML files.
 
-## 📋 Requirements Met
+---
 
-✅ 5+ webpages with professional design
-✅ Advanced CSS with animations
-✅ JavaScript functionality
-✅ Desktop-optimized layout
-✅ Contact and booking features
+## Data behavior (important)
 
-## Team
+### Backend-persisted data
 
-[Your names here]
+- Users/auth
+- Appointments
+- Symptom logs
+
+### Local browser data
+
+- `erayaUser` / `erayaUsers` (frontend convenience profile/session mirror)
+- `userData` (setup/profile settings)
+- `symptomsData` (local symptom backup/fallback)
+- `wellnessStats` (client wellness counters)
+
+This hybrid approach keeps critical functionality working even during temporary network/API interruptions.
+
+---
+
+## Deployment
+
+### Docker
+
+```bash
+docker build -t eraya .
+docker run -p 8080:8080 eraya
+```
+
+### Google Cloud Run
+
+```bash
+gcloud run deploy eraya --source . --region us-central1 --allow-unauthenticated
+```
+
+### Google App Engine
+
+```bash
+gcloud app deploy
+```
+
+---
+
+## Notes
+
+- Backend files were intentionally preserved during this merge (`main.py`, `db.py`, auth/symptoms/appointments APIs).
+- Updated frontend was integrated with API compatibility retained.
+- If you want, the next step can be adding backend endpoints for:
+  - server-side settings persistence
+  - secure password update
+  - account deletion

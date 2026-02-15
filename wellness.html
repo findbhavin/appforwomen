@@ -3,245 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eraya - Wellness</title>
+    <title>Eraya - Wellness Hub</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .page-container {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            min-height: 100vh;
-        }
-
-        .wellness-content {
-            padding: 40px;
-            background-color: var(--lavender-blush);
-        }
-
-        .page-header {
-            margin-bottom: 40px;
-        }
-
-        .page-header h1 {
-            font-size: 42px;
-            color: var(--dark-text);
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            font-size: 16px;
-            color: var(--light-text);
-        }
-
-        .wellness-categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .category-card {
-            background: linear-gradient(135deg, var(--powder-pink) 0%, var(--medium-pink) 100%);
-            border-radius: 20px;
-            padding: 35px;
-            color: var(--white);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .category-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(207, 116, 134, 0.3);
-        }
-
-        .category-card h2 {
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
-
-        .category-card p {
-            font-size: 15px;
-            opacity: 0.9;
-        }
-
-        .resources-section {
-            background-color: var(--white);
-            border-radius: 20px;
-            padding: 35px;
-        }
-
-        .resources-section h2 {
-            font-size: 28px;
-            color: var(--dark-text);
-            margin-bottom: 25px;
-        }
-
-        .resource-list {
-            display: grid;
-            gap: 20px;
-        }
-
-        .resource-item {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background-color: var(--lavender-blush);
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .resource-item:hover {
-            background-color: var(--light-pink);
-            transform: translateX(10px);
-        }
-
-        .resource-icon {
-            width: 60px;
-            height: 60px;
-            background-color: var(--powder-pink);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            flex-shrink: 0;
-        }
-
-        .resource-info h3 {
-            font-size: 18px;
-            color: var(--dark-text);
-            margin-bottom: 5px;
-        }
-
-        .resource-info p {
-            font-size: 14px;
-            color: var(--light-text);
-        }
-    </style>
 </head>
 <body>
-    <div class="page-container">
-        <!-- Sidebar (same as dashboard) -->
+    <div class="container">
+        <!-- Sidebar Navigation (same as dashboard) -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="logo.png" alt="Eraya Logo" class="logo-image">
+                <img src="images/logo.png" alt="Eraya Logo" class="logo-image">
             </div>
-            
             <nav class="nav-menu">
                 <a href="index.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <span>Dashboard</span>
                 </a>
-                
                 <a href="wellness.html" class="nav-item active">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                     <span>Wellness</span>
-                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"/></svg>
                 </a>
-                
                 <a href="doctors.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Doctors</span>
                 </a>
-                
                 <a href="mycycle.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/></svg>
                     <span>My Cycle</span>
                 </a>
-                
                 <a href="settings.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Settings</span>
                 </a>
-                
                 <a href="profile.html" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                    </svg>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2"/></svg>
                     <span>Profile</span>
                 </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
-        <div class="wellness-content">
-            <div class="page-header">
+        <main class="wellness-main">
+            <div class="wellness-header">
                 <h1>Wellness Hub</h1>
-                <p>Your personalized wellness journey starts here</p>
+                <p>Your daily dose of inspiration and health wisdom</p>
             </div>
 
-            <div class="wellness-categories">
-                <div class="category-card">
-                    <h2>🧘‍♀️ Yoga & Stretching</h2>
-                    <p>Gentle exercises tailored to your cycle phase</p>
+            <!-- Daily Quote -->
+            <div class="wellness-card quote-card">
+                <div class="card-icon">💭</div>
+                <h2>Daily Inspiration</h2>
+                <div id="quoteContent" class="quote-content">
+                    <div class="loading">Loading inspiration...</div>
                 </div>
+                <button class="refresh-btn" onclick="fetchNewQuote()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21.5 2V8M21.5 8H15.5M21.5 8L18 4.5C16.79 3.2 15.22 2.31 13.49 1.96C11.76 1.62 9.96 1.82 8.35 2.55C6.75 3.28 5.41 4.51 4.52 6.05C3.64 7.59 3.25 9.38 3.41 11.17C3.57 12.95 4.27 14.65 5.41 16.02C6.55 17.39 8.09 18.38 9.81 18.85C11.53 19.33 13.35 19.26 15.03 18.67C16.72 18.08 18.18 16.99 19.22 15.55" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    New Quote
+                </button>
+            </div>
 
-                <div class="category-card">
-                    <h2>💪 Strength Training</h2>
-                    <p>Build strength with cycle-synced workouts</p>
-                </div>
-
-                <div class="category-card">
-                    <h2>🧠 Meditation</h2>
-                    <p>Guided meditation for hormonal balance</p>
-                </div>
-
-                <div class="category-card">
-                    <h2>🍎 Nutrition</h2>
-                    <p>Cycle-based meal plans and recipes</p>
+            <!-- Health Tips -->
+            <div class="wellness-card tips-card">
+                <div class="card-icon">💡</div>
+                <h2>Period Wellness Tips</h2>
+                <div id="tipsContent" class="tips-content">
+                    <div class="loading">Loading health tips...</div>
                 </div>
             </div>
 
-            <div class="resources-section">
-                <h2>Recommended for You</h2>
-                <div class="resource-list">
-                    <div class="resource-item">
-                        <div class="resource-icon">🌸</div>
-                        <div class="resource-info">
-                            <h3>Period Pain Relief Yoga</h3>
-                            <p>15-minute gentle flow to ease cramps and discomfort</p>
-                        </div>
+            <!-- Exercise -->
+            <div class="wellness-card exercise-card">
+                <div class="card-icon">🧘</div>
+                <h2>Recommended Exercises</h2>
+                <div class="exercise-grid">
+                    <div class="exercise-item" onclick="showExerciseDetails('yoga')">
+                        <img src="images/meditation.png" alt="Yoga" onerror="this.style.fontSize='3rem';this.outerHTML='<div style=\'font-size:3rem;margin-bottom:12px\'>🧘</div>'">
+                        <h3>Gentle Yoga</h3>
+                        <p>Reduce cramps &amp; tension</p>
                     </div>
-
-                    <div class="resource-item">
-                        <div class="resource-icon">🌙</div>
-                        <div class="resource-info">
-                            <h3>Sleep Better During Your Cycle</h3>
-                            <p>Relaxation techniques for restful sleep</p>
-                        </div>
+                    <div class="exercise-item" onclick="showExerciseDetails('walking')">
+                        <img src="images/workout.png" alt="Walking" onerror="this.style.fontSize='3rem';this.outerHTML='<div style=\'font-size:3rem;margin-bottom:12px\'>🚶</div>'">
+                        <h3>Light Walking</h3>
+                        <p>Boost circulation</p>
                     </div>
-
-                    <div class="resource-item">
-                        <div class="resource-icon">🥗</div>
-                        <div class="resource-info">
-                            <h3>Iron-Rich Recipes</h3>
-                            <p>Delicious meals to replenish nutrients</p>
-                        </div>
-                    </div>
-
-                    <div class="resource-item">
-                        <div class="resource-icon">💆‍♀️</div>
-                        <div class="resource-info">
-                            <h3>Self-Care Rituals</h3>
-                            <p>Daily practices for hormonal harmony</p>
-                        </div>
+                    <div class="exercise-item" onclick="showExerciseDetails('stretching')">
+                        <img src="images/focused.png" alt="Stretching" onerror="this.style.fontSize='3rem';this.outerHTML='<div style=\'font-size:3rem;margin-bottom:12px\'>🤸</div>'">
+                        <h3>Stretching</h3>
+                        <p>Relieve muscle pain</p>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Nutrition -->
+            <div class="wellness-card nutrition-card">
+                <div class="card-icon">🥗</div>
+                <h2>Nutrition for Your Cycle</h2>
+                <div class="nutrition-tabs">
+                    <button class="tab-btn active" data-phase="menstrual" onclick="showPhase('menstrual', this)">Menstrual</button>
+                    <button class="tab-btn" data-phase="follicular" onclick="showPhase('follicular', this)">Follicular</button>
+                    <button class="tab-btn" data-phase="ovulation" onclick="showPhase('ovulation', this)">Ovulation</button>
+                    <button class="tab-btn" data-phase="luteal" onclick="showPhase('luteal', this)">Luteal</button>
+                </div>
+                <div id="nutritionContent" class="nutrition-content"></div>
+            </div>
+
+            <!-- Meditation -->
+            <div class="wellness-card meditation-card">
+                <div class="card-icon">🎵</div>
+                <h2>Meditation &amp; Relaxation</h2>
+                <div class="meditation-options">
+                    <button class="meditation-btn" onclick="startMeditation(5)">
+                        <span class="time">5 min</span>
+                        <span class="label">Quick Calm</span>
+                    </button>
+                    <button class="meditation-btn" onclick="startMeditation(10)">
+                        <span class="time">10 min</span>
+                        <span class="label">Deep Relaxation</span>
+                    </button>
+                    <button class="meditation-btn" onclick="startMeditation(15)">
+                        <span class="time">15 min</span>
+                        <span class="label">Full Session</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div style="margin-bottom: 25px;">
+                <h3 style="font-size:18px; font-weight:600; color:var(--dark-text); margin-bottom:18px; display:flex; align-items:center; gap:8px;">📊 Your Progress</h3>
+                <div class="info-item">
+                    <span class="dot teal"></span>
+                    <span>Days tracked</span>
+                    <span class="value" id="daysTracked">12</span>
+                </div>
+                <div class="info-item">
+                    <span class="dot green"></span>
+                    <span>Workouts done</span>
+                    <span class="value" id="workoutsCompleted">8</span>
+                </div>
+                <div class="info-item">
+                    <span class="dot purple"></span>
+                    <span>Meditation mins</span>
+                    <span class="value" id="meditationMinutes">35</span>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size:18px; font-weight:600; color:var(--dark-text); margin-bottom:18px;">⚡ Quick Actions</h3>
+                <button class="add-symptoms-btn" style="width:100%;margin-bottom:12px;border-radius:12px;" onclick="location.href='symptoms.html'">Log Symptoms</button>
+                <button class="add-symptoms-btn" style="width:100%;margin-bottom:12px;border-radius:12px;background-color:var(--powder-pink);" onclick="startMeditation(5)">Start Meditation</button>
+                <button class="add-symptoms-btn" style="width:100%;border-radius:12px;background-color:var(--dot-teal);" onclick="trackWater()">💧 Track Water</button>
+            </div>
+        </aside>
     </div>
+
+    <script src="wellness.js"></script>
 </body>
 </html>

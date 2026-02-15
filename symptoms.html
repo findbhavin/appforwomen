@@ -5,328 +5,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eraya - Add Symptoms</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .symptoms-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .symptoms-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .symptoms-header h1 {
-            font-size: 36px;
-            color: var(--dark-text);
-            margin-bottom: 10px;
-        }
-
-        .symptoms-header p {
-            font-size: 16px;
-            color: var(--light-text);
-        }
-
-        .symptoms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .symptom-card {
-            background-color: var(--white);
-            border: 2px solid var(--light-pink);
-            border-radius: 16px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .symptom-card:hover {
-            border-color: var(--blush);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(207, 116, 134, 0.2);
-        }
-
-        .symptom-card.selected {
-            background-color: var(--powder-pink);
-            border-color: var(--blush);
-        }
-
-        .symptom-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .symptom-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--dark-text);
-        }
-
-        .intensity-section {
-            margin-top: 30px;
-            padding: 30px;
-            background-color: rgba(255, 214, 229, 0.3);
-            border-radius: 16px;
-        }
-
-        .intensity-section h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--dark-text);
-        }
-
-        .intensity-slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 10px;
-            background: linear-gradient(to right, #4ECDC4, #FFD93D, #FF6B9D);
-            outline: none;
-            margin-bottom: 10px;
-        }
-
-        .intensity-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: var(--light-text);
-        }
-
-        .notes-section {
-            margin-top: 30px;
-        }
-
-        .notes-section textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 15px;
-            border: 2px solid var(--light-pink);
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 14px 32px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-primary {
-            background-color: var(--blush);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background-color: #b86474;
-            transform: scale(1.05);
-        }
-
-        .btn-secondary {
-            background-color: var(--white);
-            color: var(--blush);
-            border: 2px solid var(--blush);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--light-pink);
-        }
-    </style>
 </head>
-<body style="background-color: var(--lavender-blush);">
-    <div class="symptoms-container">
-        <div class="symptoms-header">
-            <h1>How are you feeling?</h1>
-            <p>Select all symptoms you're experiencing</p>
-        </div>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation (same as dashboard) -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Eraya Logo" class="logo-image">
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="wellness.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    <span>Wellness</span>
+                </a>
+                <a href="doctors.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M19 21V5C19 3 17 3 17 3H7C7 3 5 3 5 5V21" stroke="currentColor" stroke-width="2"/></svg>
+                    <span>Doctors</span>
+                </a>
+                <a href="mycycle.html" class="nav-item active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"/></svg>
+                    <span>My Cycle</span>
+                    <svg class="nav-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"/></svg>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2"/></svg>
+                    <span>Settings</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2"/></svg>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
 
-        <div class="symptoms-grid">
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">😖</div>
-                <div class="symptom-name">Cramps</div>
+        <!-- Main Content -->
+        <main class="symptoms-main">
+            <div class="symptoms-header">
+                <div class="header-content">
+                    <a href="index.html" class="back-btn">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                    <div>
+                        <h1>Today</h1>
+                        <p>Cycle day 6</p>
+                    </div>
+                </div>
+                <div class="search-bar-symptoms">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <input type="text" placeholder="Search symptoms..." id="searchInput">
+                </div>
             </div>
 
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">🤕</div>
-                <div class="symptom-name">Headache</div>
+            <div class="symptoms-content">
+                <!-- Pregnancy Test -->
+                <div class="symptom-category">
+                    <h2>Pregnancy test</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="pregnancy" data-value="no-test"><span class="chip-icon">🚫</span><span>Didn't take tests</span></button>
+                        <button class="chip" data-category="pregnancy" data-value="positive"><span class="chip-icon">✅</span><span>Positive</span></button>
+                        <button class="chip" data-category="pregnancy" data-value="negative"><span class="chip-icon">❌</span><span>Negative</span></button>
+                        <button class="chip" data-category="pregnancy" data-value="faint"><span class="chip-icon">➖</span><span>Faint line</span></button>
+                    </div>
+                </div>
+
+                <!-- Ovulation Test -->
+                <div class="symptom-category">
+                    <h2>Ovulation test</h2>
+                    <p class="category-desc">Log them to know when you ovulate</p>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="ovulation" data-value="no-test"><span class="chip-icon">🚫</span><span>Didn't take tests</span></button>
+                        <button class="chip" data-category="ovulation" data-value="positive"><span class="chip-icon">✅</span><span>Test: positive</span></button>
+                        <button class="chip" data-category="ovulation" data-value="negative"><span class="chip-icon">➖</span><span>Test: negative</span></button>
+                        <button class="chip" data-category="ovulation" data-value="my-method"><span class="chip-icon">📍</span><span>Ovulation: my method</span></button>
+                    </div>
+                </div>
+
+                <!-- Symptoms -->
+                <div class="symptom-category">
+                    <h2>Symptoms</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="symptoms" data-value="fine"><span class="chip-icon">👍</span><span>Everything is fine</span></button>
+                        <button class="chip" data-category="symptoms" data-value="cramps"><span class="chip-icon">🔴</span><span>Cramps</span></button>
+                        <button class="chip" data-category="symptoms" data-value="tender-breasts"><span class="chip-icon">🔴</span><span>Tender breasts</span></button>
+                        <button class="chip" data-category="symptoms" data-value="headache"><span class="chip-icon">😣</span><span>Headache</span></button>
+                        <button class="chip" data-category="symptoms" data-value="acne"><span class="chip-icon">⚫</span><span>Acne</span></button>
+                        <button class="chip" data-category="symptoms" data-value="backache"><span class="chip-icon">🔴</span><span>Backache</span></button>
+                        <button class="chip" data-category="symptoms" data-value="fatigue"><span class="chip-icon">💤</span><span>Fatigue</span></button>
+                        <button class="chip" data-category="symptoms" data-value="cravings"><span class="chip-icon">😋</span><span>Cravings</span></button>
+                        <button class="chip" data-category="symptoms" data-value="insomnia"><span class="chip-icon">😴</span><span>Insomnia</span></button>
+                        <button class="chip" data-category="symptoms" data-value="abdominal-pain"><span class="chip-icon">🔴</span><span>Abdominal pain</span></button>
+                        <button class="chip" data-category="symptoms" data-value="vaginal-itching"><span class="chip-icon">🔴</span><span>Vaginal itching</span></button>
+                        <button class="chip" data-category="symptoms" data-value="vaginal-dryness"><span class="chip-icon">💧</span><span>Vaginal dryness</span></button>
+                    </div>
+                </div>
+
+                <!-- Vaginal Discharge -->
+                <div class="symptom-category">
+                    <h2>Vaginal discharge</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="discharge" data-value="no-discharge"><span class="chip-icon">🚫</span><span>No discharge</span></button>
+                        <button class="chip" data-category="discharge" data-value="creamy"><span class="chip-icon">💧</span><span>Creamy</span></button>
+                        <button class="chip" data-category="discharge" data-value="watery"><span class="chip-icon">💦</span><span>Watery</span></button>
+                        <button class="chip" data-category="discharge" data-value="sticky"><span class="chip-icon">💧</span><span>Sticky</span></button>
+                        <button class="chip" data-category="discharge" data-value="egg-white"><span class="chip-icon">🥚</span><span>Egg white</span></button>
+                        <button class="chip" data-category="discharge" data-value="spotting"><span class="chip-icon">🔴</span><span>Spotting</span></button>
+                        <button class="chip" data-category="discharge" data-value="unusual"><span class="chip-icon">⚠️</span><span>Unusual</span></button>
+                    </div>
+                </div>
+
+                <!-- Digestion -->
+                <div class="symptom-category">
+                    <h2>Digestion and stool</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="digestion" data-value="nausea"><span class="chip-icon">🤢</span><span>Nausea</span></button>
+                        <button class="chip" data-category="digestion" data-value="bloating"><span class="chip-icon">💨</span><span>Bloating</span></button>
+                        <button class="chip" data-category="digestion" data-value="constipation"><span class="chip-icon">🚫</span><span>Constipation</span></button>
+                        <button class="chip" data-category="digestion" data-value="diarrhea"><span class="chip-icon">💩</span><span>Diarrhea</span></button>
+                    </div>
+                </div>
+
+                <!-- Other -->
+                <div class="symptom-category">
+                    <h2>Other</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="other" data-value="travel"><span class="chip-icon">✈️</span><span>Travel</span></button>
+                        <button class="chip" data-category="other" data-value="stress"><span class="chip-icon">⚡</span><span>Stress</span></button>
+                        <button class="chip" data-category="other" data-value="meditation"><span class="chip-icon">🧘</span><span>Meditation</span></button>
+                        <button class="chip" data-category="other" data-value="journaling"><span class="chip-icon">📓</span><span>Journaling</span></button>
+                        <button class="chip" data-category="other" data-value="kegel"><span class="chip-icon">💪</span><span>Kegel exercises</span></button>
+                        <button class="chip" data-category="other" data-value="breathing"><span class="chip-icon">🫁</span><span>Breathing exercises</span></button>
+                        <button class="chip" data-category="other" data-value="alcohol"><span class="chip-icon">🍷</span><span>Alcohol</span></button>
+                    </div>
+                </div>
+
+                <!-- Physical Activity -->
+                <div class="symptom-category">
+                    <h2>Physical activity</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="activity" data-value="no-exercise"><span class="chip-icon">🚫</span><span>Didn't exercise</span></button>
+                        <button class="chip" data-category="activity" data-value="yoga"><span class="chip-icon">🧘</span><span>Yoga</span></button>
+                        <button class="chip" data-category="activity" data-value="gym"><span class="chip-icon">💪</span><span>Gym</span></button>
+                        <button class="chip" data-category="activity" data-value="aerobics"><span class="chip-icon">🎵</span><span>Aerobics &amp; dancing</span></button>
+                        <button class="chip" data-category="activity" data-value="swimming"><span class="chip-icon">🏊</span><span>Swimming</span></button>
+                        <button class="chip" data-category="activity" data-value="running"><span class="chip-icon">🏃</span><span>Running</span></button>
+                        <button class="chip" data-category="activity" data-value="cycling"><span class="chip-icon">🚴</span><span>Cycling</span></button>
+                        <button class="chip" data-category="activity" data-value="walking"><span class="chip-icon">🚶</span><span>Walking</span></button>
+                    </div>
+                </div>
+
+                <!-- Menstrual Flow -->
+                <div class="symptom-category">
+                    <h2>Menstrual flow</h2>
+                    <p class="category-desc">Estimate your average daily flow</p>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="flow" data-value="light"><span class="chip-icon">💧</span><span>Light</span></button>
+                        <button class="chip" data-category="flow" data-value="medium"><span class="chip-icon">💧💧</span><span>Medium</span></button>
+                        <button class="chip" data-category="flow" data-value="heavy"><span class="chip-icon">💧💧💧</span><span>Heavy</span></button>
+                        <button class="chip" data-category="flow" data-value="clots"><span class="chip-icon">🩸</span><span>Blood Clots</span></button>
+                    </div>
+                </div>
+
+                <!-- Mood -->
+                <div class="symptom-category">
+                    <h2>Mood</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="mood" data-value="calm"><span class="chip-icon">😌</span><span>Calm</span></button>
+                        <button class="chip" data-category="mood" data-value="happy"><span class="chip-icon">😊</span><span>Happy</span></button>
+                        <button class="chip" data-category="mood" data-value="energetic"><span class="chip-icon">🤩</span><span>Energetic</span></button>
+                        <button class="chip" data-category="mood" data-value="mood-swings"><span class="chip-icon">😐</span><span>Mood swings</span></button>
+                        <button class="chip" data-category="mood" data-value="irritated"><span class="chip-icon">😤</span><span>Irritated</span></button>
+                        <button class="chip" data-category="mood" data-value="anxious"><span class="chip-icon">😰</span><span>Anxious</span></button>
+                        <button class="chip" data-category="mood" data-value="depressed"><span class="chip-icon">😔</span><span>Depressed</span></button>
+                        <button class="chip" data-category="mood" data-value="low-energy"><span class="chip-icon">😑</span><span>Low energy</span></button>
+                        <button class="chip" data-category="mood" data-value="confused"><span class="chip-icon">😕</span><span>Confused</span></button>
+                    </div>
+                </div>
+
+                <!-- Sex Drive -->
+                <div class="symptom-category">
+                    <h2>Sex and sex drive</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="sex" data-value="no-sex"><span class="chip-icon">🚫</span><span>Didn't have sex</span></button>
+                        <button class="chip" data-category="sex" data-value="protected"><span class="chip-icon">🛡️</span><span>Protected sex</span></button>
+                        <button class="chip" data-category="sex" data-value="unprotected"><span class="chip-icon">🔓</span><span>Unprotected sex</span></button>
+                        <button class="chip" data-category="sex" data-value="high-drive"><span class="chip-icon">❤️</span><span>High sex drive</span></button>
+                        <button class="chip" data-category="sex" data-value="neutral-drive"><span class="chip-icon">💗</span><span>Neutral sex drive</span></button>
+                        <button class="chip" data-category="sex" data-value="low-drive"><span class="chip-icon">🩶</span><span>Low sex drive</span></button>
+                    </div>
+                </div>
+
+                <div class="save-btn-container">
+                    <button class="btn-save" onclick="saveSymptoms()">Save Symptoms</button>
+                </div>
             </div>
+        </main>
 
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">😫</div>
-                <div class="symptom-name">Fatigue</div>
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="selection-summary">
+                <h3>📝 Selected Today</h3>
+                <div id="selectedItems" class="selected-items">
+                    <p class="empty-state">Select symptoms to track</p>
+                </div>
             </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">😢</div>
-                <div class="symptom-name">Mood Swings</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">🤢</div>
-                <div class="symptom-name">Nausea</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">💧</div>
-                <div class="symptom-name">Bloating</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">🌡️</div>
-                <div class="symptom-name">Hot Flashes</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">😴</div>
-                <div class="symptom-name">Insomnia</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">🍔</div>
-                <div class="symptom-name">Cravings</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">😣</div>
-                <div class="symptom-name">Back Pain</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">💭</div>
-                <div class="symptom-name">Brain Fog</div>
-            </div>
-
-            <div class="symptom-card" onclick="toggleSymptom(this)">
-                <div class="symptom-icon">😰</div>
-                <div class="symptom-name">Anxiety</div>
-            </div>
-        </div>
-
-        <div class="intensity-section">
-            <h3>Overall Discomfort Level</h3>
-            <input type="range" min="1" max="10" value="5" class="intensity-slider" id="intensitySlider">
-            <div class="intensity-labels">
-                <span>Mild</span>
-                <span>Moderate</span>
-                <span>Severe</span>
-            </div>
-            <p style="text-align: center; margin-top: 10px; font-weight: 600; color: var(--blush);">
-                Level: <span id="intensityValue">5</span>/10
-            </p>
-        </div>
-
-        <div class="notes-section">
-            <h3 style="margin-bottom: 15px; color: var(--dark-text);">Additional Notes (Optional)</h3>
-            <textarea id="symptomNotes" placeholder="Add any additional details about how you're feeling..."></textarea>
-        </div>
-
-        <div class="action-buttons">
-            <button class="btn btn-secondary" onclick="location.href='index.html'">Cancel</button>
-            <button class="btn btn-primary" onclick="saveSymptoms()">Save Symptoms</button>
-        </div>
+        </aside>
     </div>
 
-    <script src="auth.js"></script>
-    <script>
-        function toggleSymptom(card) {
-            card.classList.toggle('selected');
-        }
-
-        const slider = document.getElementById('intensitySlider');
-        const intensityValue = document.getElementById('intensityValue');
-        const notesEl = document.getElementById('symptomNotes');
-
-        if (slider) {
-            slider.addEventListener('input', function() {
-                intensityValue.textContent = this.value;
-            });
-        }
-
-        function getTodayDate() {
-            return new Date().toISOString().split('T')[0];
-        }
-
-        function loadSymptomsForToday() {
-            if (!window.ErayaAuth) return;
-            window.ErayaAuth.getCurrentUser().then(function(user) {
-                if (!user) return;
-                fetch('/api/symptoms?date=' + getTodayDate(), { credentials: 'include' })
-                    .then(function(r) { return r.json(); })
-                    .then(function(data) {
-                        if (data.log && data.log.symptoms && data.log.symptoms.length) {
-                            data.log.symptoms.forEach(function(name) {
-                                document.querySelectorAll('.symptom-name').forEach(function(el) {
-                                    if (el.textContent.trim() === name) {
-                                        el.closest('.symptom-card').classList.add('selected');
-                                    }
-                                });
-                            });
-                            if (data.log.intensity && slider) {
-                                slider.value = data.log.intensity;
-                                intensityValue.textContent = data.log.intensity;
-                            }
-                            if (data.log.notes && notesEl) notesEl.value = data.log.notes;
-                        }
-                    });
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadSymptomsForToday);
-
-        function saveSymptoms() {
-            const selectedSymptoms = document.querySelectorAll('.symptom-card.selected');
-            const symptoms = Array.from(selectedSymptoms).map(function(card) {
-                return card.querySelector('.symptom-name').textContent.trim();
-            });
-            const intensity = slider ? slider.value : 5;
-            const notes = notesEl ? notesEl.value : '';
-
-            fetch('/api/symptoms', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    log_date: getTodayDate(),
-                    symptoms: symptoms,
-                    intensity: parseInt(intensity, 10) || 5,
-                    notes: notes
-                })
-            }).then(function(r) {
-                if (r.status === 401) {
-                    if (confirm('Please sign in to save symptoms. Go to login?')) {
-                        window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
-                    }
-                    return null;
-                }
-                return r.json();
-            }).then(function(data) {
-                if (!data) return;
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    alert('Symptoms saved successfully!');
-                    location.href = 'index.html';
-                }
-            }).catch(function() {
-                alert('Could not save. Check your connection and try again.');
-            });
-        }
-    </script>
+    <script src="symptoms.js"></script>
 </body>
 </html>
