@@ -10,12 +10,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'eraya-dev-secret-change-in-produc
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
-# CORS for same-origin and simple API access (optional: restrict in production)
-try:
-    from flask_cors import CORS
-    CORS(app, supports_credentials=True, origins=['http://localhost:8080', 'http://127.0.0.1:8080', None])
-except ImportError:
-    pass
+# No CORS: app serves HTML and API from same origin. (flask-cors removed to avoid TypeError.)
 
 import db
 db.init_db()
@@ -141,6 +136,15 @@ def api_symptoms_create():
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    """Avoid 404 for browser favicon requests."""
+    if os.path.isfile('favicon.ico'):
+        return send_from_directory('.', 'favicon.ico')
+    from flask import Response
+    return Response(status=204)
 
 
 @app.route('/<path:path>')
