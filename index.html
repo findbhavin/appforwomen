@@ -1,66 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eraya - Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="chatbot.js"></script>
 </head>
+
 <body>
+    <script>
+        (function () {
+            window._symptomTrackerOpenPending = false;
+            window.toggleSymptomTracker = function () {
+                if (window._symptomTrackerToggleImpl) window._symptomTrackerToggleImpl();
+                else window._symptomTrackerOpenPending = true;
+            };
+        })();
+    </script>
     <div class="container">
         <!-- Left Sidebar Navigation -->
         <aside class="sidebar">
             <div class="logo">
                 <img src="images/logo.png" alt="Eraya Logo" class="logo-image">
             </div>
-            
+
             <nav class="nav-menu">
                 <a href="index.html" class="nav-item active">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path
+                            d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                     <span>Dashboard</span>
                     <svg class="nav-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
-                
+
                 <a href="wellness.html" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path
+                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                     <span>Wellness</span>
                 </a>
-                
+
                 <a href="doctors.html" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 21V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H7C6.46957 3 5.96086 3.21071 5.58579 3.58579C5.21071 3.96086 5 4.46957 5 5V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 11H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path
+                            d="M19 21V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H7C6.46957 3 5.96086 3.21071 5.58579 3.58579C5.21071 3.96086 5 4.46957 5 5V21"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 11H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                     <span>Doctors</span>
                 </a>
-                
+
                 <a href="mycycle.html" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 2.69L5.5 9.19V20.31H18.5V9.19L12 2.69Z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     <span>My Cycle</span>
                 </a>
-                
+
                 <a href="settings.html" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     <span>Settings</span>
                 </a>
-                
+
                 <a href="profile.html" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path
+                            d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                     <span>Profile</span>
                 </a>
@@ -108,8 +138,11 @@
             <div class="feeling-section">
                 <h2>How are you feeling today?</h2>
                 <p>Tell us more about your body to get analysis</p>
-                <button class="add-symptoms-btn" data-feature-target="symptoms.html">Add Symptoms +</button>
+                <button type="button" class="add-symptoms-btn" id="dashboard-add-symptoms">Add Symptoms +</button>
             </div>
+
+            <!-- Inline Symptom Tracker (React) – toggled by the button above -->
+            <div id="symptom-tracker-root"></div>
 
             <!-- Bottom Cards -->
             <div class="bottom-cards">
@@ -129,87 +162,34 @@
             </div>
         </main>
 
-        <!-- Right Sidebar - Calendar & Info -->
+        <!-- Right Sidebar - Calendar & Info (React-powered) -->
         <aside class="right-sidebar">
-            <!-- Calendar -->
-            <div class="calendar-section">
-                <div class="calendar-header">
-                    <h3>January</h3>
-                </div>
-                <div class="calendar-weekdays">
-                    <div>m</div>
-                    <div>t</div>
-                    <div>w</div>
-                    <div>t</div>
-                    <div>f</div>
-                    <div>s</div>
-                    <div>s</div>
-                </div>
-                <div class="calendar-days" id="calendarDays">
-                    <!-- Generated by JavaScript -->
-                </div>
+            <!-- React Calendar -->
+            <div class="calendar-section" id="calendar-root">
+                <!-- Rendered by CalendarComponent.jsx -->
             </div>
 
-            <!-- Today Section -->
-            <div class="today-section">
-                <h3><span class="calendar-icon">📅</span> Today</h3>
-                <div class="info-item">
-                    <span class="dot green"></span>
-                    <span>Cycle Day</span>
-                    <span class="value">2</span>
-                </div>
-                <div class="info-item">
-                    <span class="dot red"></span>
-                    <span>Cycle Phase</span>
-                    <span class="value">Ovulation</span>
-                </div>
-                <div class="info-item">
-                    <span class="dot yellow"></span>
-                    <span>Productivity</span>
-                    <span class="value">48%</span>
-                </div>
-                <div class="info-item">
-                    <span class="dot teal"></span>
-                    <span>Next Period</span>
-                    <span class="value">2/02/2026</span>
-                </div>
-                
-                <!-- Progress Bar -->
-                <div class="cycle-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill red" style="width: 25%"></div>
-                        <div class="progress-fill yellow" style="width: 25%"></div>
-                        <div class="progress-fill gray" style="width: 50%"></div>
-                    </div>
-                </div>
+            <!-- React Today / CycleCounter -->
+            <div class="today-section" id="today-root">
+                <!-- Rendered by CycleCounter.jsx -->
             </div>
 
-            <!-- History Section -->
-            <div class="history-section">
-                <h3><span class="calendar-icon">📊</span> History</h3>
-                <div class="info-item">
-                    <span class="dot teal"></span>
-                    <span>Average period</span>
-                    <span class="value">5 days</span>
-                </div>
-                <div class="info-item">
-                    <span class="dot purple"></span>
-                    <span>Average cycle</span>
-                    <span class="value">28 days</span>
-                </div>
-                <div class="info-item">
-                    <span class="dot blue"></span>
-                    <span>Weight</span>
-                    <span class="value">60kg</span>
-                </div>
+            <!-- React History -->
+            <div class="history-section" id="history-root">
+                <!-- Rendered by HistorySection.jsx -->
             </div>
         </aside>
     </div>
 
+    <!-- React 18 (production) + bundled components — works on file:// and http:// (no Babel external .jsx fetch) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="js/eraya-react-dashboard.js"></script>
+
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
-        (function() {
+        (function () {
             function safeParseObject(rawValue) {
                 if (!rawValue) return {};
                 try {
@@ -234,7 +214,7 @@
 
             if (window.ErayaAuth) {
                 window.ErayaAuth.renderAuthStatus('auth-status');
-                window.ErayaAuth.getCurrentUser().then(function(user) {
+                window.ErayaAuth.getCurrentUser().then(function (user) {
                     if (user && user.name) {
                         setWelcomeName(user.name);
                         localStorage.setItem('erayaUser', JSON.stringify({
@@ -242,11 +222,43 @@
                             name: user.name
                         }));
                     }
-                }).catch(function() {
+                }).catch(function () {
                     // Keep local fallback name only.
                 });
             }
         })();
     </script>
+
+    <script>
+        (function () {
+            function openDashboardSymptomTracker() {
+                if (typeof window._symptomTrackerToggleImpl === 'function') {
+                    window._symptomTrackerToggleImpl();
+                    return;
+                }
+                if (typeof window.toggleSymptomTracker === 'function') {
+                    window.toggleSymptomTracker();
+                    return;
+                }
+                window.location.href = 'symptoms.html';
+            }
+            function bindAddSymptoms() {
+                var btn = document.getElementById('dashboard-add-symptoms');
+                if (!btn || btn.dataset.bound) return;
+                btn.dataset.bound = '1';
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    openDashboardSymptomTracker();
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', bindAddSymptoms);
+            } else {
+                bindAddSymptoms();
+            }
+        })();
+    </script>
+
 </body>
+
 </html>

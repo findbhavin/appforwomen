@@ -40,6 +40,7 @@
                     <span>Profile</span>
                 </a>
             </nav>
+            <div id="auth-status" style="margin-top:auto;padding:16px 0;font-size:14px;"></div>
         </aside>
 
         <!-- Main Content -->
@@ -50,8 +51,8 @@
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                     <div>
-                        <h1>Today</h1>
-                        <p>Cycle day 6</p>
+                        <h1 id="symptomPageTitle">Today</h1>
+                        <p id="symptomPageSubtitle">Cycle day 6</p>
                     </div>
                 </div>
                 <div class="search-bar-symptoms">
@@ -112,6 +113,8 @@
                         <button class="chip" data-category="discharge" data-value="watery"><span class="chip-icon">💦</span><span>Watery</span></button>
                         <button class="chip" data-category="discharge" data-value="sticky"><span class="chip-icon">💧</span><span>Sticky</span></button>
                         <button class="chip" data-category="discharge" data-value="egg-white"><span class="chip-icon">🥚</span><span>Egg white</span></button>
+                        <button class="chip" data-category="discharge" data-value="clumpy-white"><span class="chip-icon">🤍</span><span>Clumpy white</span></button>
+                        <button class="chip" data-category="discharge" data-value="gray"><span class="chip-icon">🩶</span><span>Gray</span></button>
                         <button class="chip" data-category="discharge" data-value="spotting"><span class="chip-icon">🔴</span><span>Spotting</span></button>
                         <button class="chip" data-category="discharge" data-value="unusual"><span class="chip-icon">⚠️</span><span>Unusual</span></button>
                     </div>
@@ -139,6 +142,7 @@
                         <button class="chip" data-category="other" data-value="kegel"><span class="chip-icon">💪</span><span>Kegel exercises</span></button>
                         <button class="chip" data-category="other" data-value="breathing"><span class="chip-icon">🫁</span><span>Breathing exercises</span></button>
                         <button class="chip" data-category="other" data-value="alcohol"><span class="chip-icon">🍷</span><span>Alcohol</span></button>
+                        <button class="chip" data-category="other" data-value="disease-injury"><span class="chip-icon">🤒</span><span>Disease or injury</span></button>
                     </div>
                 </div>
 
@@ -154,6 +158,7 @@
                         <button class="chip" data-category="activity" data-value="running"><span class="chip-icon">🏃</span><span>Running</span></button>
                         <button class="chip" data-category="activity" data-value="cycling"><span class="chip-icon">🚴</span><span>Cycling</span></button>
                         <button class="chip" data-category="activity" data-value="walking"><span class="chip-icon">🚶</span><span>Walking</span></button>
+                        <button class="chip" data-category="activity" data-value="team-sports"><span class="chip-icon">⚽</span><span>Team sports</span></button>
                     </div>
                 </div>
 
@@ -176,25 +181,85 @@
                         <button class="chip" data-category="mood" data-value="calm"><span class="chip-icon">😌</span><span>Calm</span></button>
                         <button class="chip" data-category="mood" data-value="happy"><span class="chip-icon">😊</span><span>Happy</span></button>
                         <button class="chip" data-category="mood" data-value="energetic"><span class="chip-icon">🤩</span><span>Energetic</span></button>
+                        <button class="chip" data-category="mood" data-value="frisky"><span class="chip-icon">😏</span><span>Frisky</span></button>
                         <button class="chip" data-category="mood" data-value="mood-swings"><span class="chip-icon">😐</span><span>Mood swings</span></button>
                         <button class="chip" data-category="mood" data-value="irritated"><span class="chip-icon">😤</span><span>Irritated</span></button>
+                        <button class="chip" data-category="mood" data-value="sad"><span class="chip-icon">😢</span><span>Sad</span></button>
                         <button class="chip" data-category="mood" data-value="anxious"><span class="chip-icon">😰</span><span>Anxious</span></button>
                         <button class="chip" data-category="mood" data-value="depressed"><span class="chip-icon">😔</span><span>Depressed</span></button>
+                        <button class="chip" data-category="mood" data-value="feeling-guilty"><span class="chip-icon">😔</span><span>Feeling guilty</span></button>
+                        <button class="chip" data-category="mood" data-value="obsessive-thoughts"><span class="chip-icon">🌀</span><span>Obsessive thoughts</span></button>
                         <button class="chip" data-category="mood" data-value="low-energy"><span class="chip-icon">😑</span><span>Low energy</span></button>
+                        <button class="chip" data-category="mood" data-value="apathetic"><span class="chip-icon">😶</span><span>Apathetic</span></button>
                         <button class="chip" data-category="mood" data-value="confused"><span class="chip-icon">😕</span><span>Confused</span></button>
+                        <button class="chip" data-category="mood" data-value="very-self-critical"><span class="chip-icon">😞</span><span>Very self-critical</span></button>
                     </div>
                 </div>
 
                 <!-- Sex Drive -->
                 <div class="symptom-category">
-                    <h2>Sex and sex drive</h2>
+                    <h2>Sex &amp; sex drive</h2>
                     <div class="symptom-chips">
                         <button class="chip" data-category="sex" data-value="no-sex"><span class="chip-icon">🚫</span><span>Didn't have sex</span></button>
                         <button class="chip" data-category="sex" data-value="protected"><span class="chip-icon">🛡️</span><span>Protected sex</span></button>
                         <button class="chip" data-category="sex" data-value="unprotected"><span class="chip-icon">🔓</span><span>Unprotected sex</span></button>
+                        <button class="chip" data-category="sex" data-value="oral-sex"><span class="chip-icon">💋</span><span>Oral sex</span></button>
+                        <button class="chip" data-category="sex" data-value="anal-sex"><span class="chip-icon">🔞</span><span>Anal sex</span></button>
+                        <button class="chip" data-category="sex" data-value="masturbation"><span class="chip-icon">✋</span><span>Masturbation</span></button>
+                        <button class="chip" data-category="sex" data-value="sensual-touch"><span class="chip-icon">🤲</span><span>Sensual touch</span></button>
+                        <button class="chip" data-category="sex" data-value="sex-toys"><span class="chip-icon">🌹</span><span>Sex toys</span></button>
+                        <button class="chip" data-category="sex" data-value="orgasm"><span class="chip-icon">✨</span><span>Orgasm</span></button>
                         <button class="chip" data-category="sex" data-value="high-drive"><span class="chip-icon">❤️</span><span>High sex drive</span></button>
                         <button class="chip" data-category="sex" data-value="neutral-drive"><span class="chip-icon">💗</span><span>Neutral sex drive</span></button>
                         <button class="chip" data-category="sex" data-value="low-drive"><span class="chip-icon">🩶</span><span>Low sex drive</span></button>
+                    </div>
+                </div>
+
+                <!-- Oral Contraceptives -->
+                <div class="symptom-category">
+                    <h2>💊 Oral contraceptives (OC)</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="oc" data-value="taken-on-time"><span class="chip-icon">✅</span><span>Taken on time</span></button>
+                        <button class="chip" data-category="oc" data-value="yesterdays-pill"><span class="chip-icon">⏪</span><span>Yesterday's pill</span></button>
+                    </div>
+                </div>
+
+                <!-- Other Pills -->
+                <div class="symptom-category">
+                    <h2>💊 Other pills (non-OC)</h2>
+                    <div class="symptom-chips">
+                        <button class="chip" data-category="other_pills" data-value="add-pill"><span class="chip-icon">➕</span><span>Add pill</span></button>
+                        <button class="chip" data-category="other_pills" data-value="set-reminders"><span class="chip-icon">⏰</span><span>Set up reminders</span></button>
+                    </div>
+                </div>
+
+                <!-- Water Tracker -->
+                <div class="symptom-category">
+                    <h2>💧 Water intake</h2>
+                    <p class="category-desc">Goal: 2.25 L (9 glasses)</p>
+                    <div class="water-tracker">
+                        <div class="water-glasses" id="waterGlasses">
+                            <!-- rendered by JS -->
+                        </div>
+                        <div class="water-controls">
+                            <button class="water-btn" onclick="adjustWater(-1)">−</button>
+                            <span class="water-label" id="waterLabel">0 / 2.25 L</span>
+                            <button class="water-btn" onclick="adjustWater(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weight Logger -->
+                <div class="symptom-category">
+                    <h2>⚖️ Weight</h2>
+                    <div class="weight-logger">
+                        <div class="weight-input-row">
+                            <input type="number" id="weightInput" class="weight-input" placeholder="e.g. 58.5" step="0.1" min="20" max="300">
+                            <span class="weight-unit">kg</span>
+                            <button class="weight-log-btn" onclick="logWeight()">Log</button>
+                            <button class="weight-clear-btn" onclick="clearWeight()" title="Clear">🗑️</button>
+                        </div>
+                        <div class="weight-saved" id="weightSaved"></div>
                     </div>
                 </div>
 

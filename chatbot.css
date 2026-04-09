@@ -1,0 +1,329 @@
+/* ============================================================
+   Eraya AI Chatbot Styles
+   Designed to complement the existing Eraya pink/wellness theme
+   without touching any existing styles.
+   ============================================================ */
+
+/* ── Floating Bubble ──────────────────────────────────────── */
+#eraya-chat-bubble {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e75480, #c2185b);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(231, 84, 128, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+#eraya-chat-bubble:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px rgba(231, 84, 128, 0.55);
+}
+
+#eraya-chat-bubble:active {
+  transform: scale(0.96);
+}
+
+#eraya-chat-bubble svg {
+  width: 26px;
+  height: 26px;
+  color: #fff;
+}
+
+/* Notification dot */
+.eraya-notif-dot {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 11px;
+  height: 11px;
+  background: #ff6b6b;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  animation: eraya-pulse 1.6s infinite;
+}
+
+@keyframes eraya-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 0.75;
+  }
+}
+
+/* ── Chat Window ──────────────────────────────────────────── */
+#eraya-chat-window {
+  position: fixed;
+  bottom: 100px;
+  right: 28px;
+  z-index: 9998;
+  width: 340px;
+  max-height: 520px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.16);
+
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+#eraya-chat-window.eraya-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+#eraya-chat-header {
+  background: linear-gradient(135deg, #e75480, #c2185b);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.eraya-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eraya-avatar {
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.eraya-header-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.eraya-header-sub {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  font-family: inherit;
+}
+
+#eraya-clear-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s;
+  flex-shrink: 0;
+}
+
+#eraya-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Messages Area ────────────────────────────────────────── */
+#eraya-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fdf6f9;
+  scroll-behavior: smooth;
+}
+
+#eraya-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+#eraya-messages::-webkit-scrollbar-thumb {
+  background: #e9b4c8;
+  border-radius: 4px;
+}
+
+.eraya-msg-wrapper {
+  display: flex;
+  max-width: 85%;
+}
+
+.eraya-msg-bot {
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.eraya-msg-user {
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.eraya-msg-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-family: inherit;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.eraya-msg-bot .eraya-msg-bubble {
+  background: #fff;
+  color: #333;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+}
+
+.eraya-msg-user .eraya-msg-bubble {
+  background: linear-gradient(135deg, #e75480, #c2185b);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+/* ── Typing Indicator ─────────────────────────────────────── */
+#eraya-typing-indicator {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #fdf6f9;
+}
+
+#eraya-typing-indicator span {
+  width: 7px;
+  height: 7px;
+  background: #e75480;
+  border-radius: 50%;
+  animation: eraya-bounce 1.2s infinite ease-in-out;
+  opacity: 0.6;
+}
+
+#eraya-typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+#eraya-typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes eraya-bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-7px);
+  }
+}
+
+/* ── Input Area ───────────────────────────────────────────── */
+#eraya-chat-input-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border-top: 1px solid #f0d9e4;
+  flex-shrink: 0;
+}
+
+#eraya-chat-input {
+  flex: 1;
+  border: 1.5px solid #f0d9e4;
+  border-radius: 22px;
+  padding: 9px 14px;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: #333;
+  background: #fdf6f9;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#eraya-chat-input:focus {
+  border-color: #e75480;
+  background: #fff;
+}
+
+#eraya-chat-input::placeholder {
+  color: #c4879e;
+}
+
+#eraya-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e75480, #c2185b);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 10px rgba(231, 84, 128, 0.35);
+}
+
+#eraya-send-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(231, 84, 128, 0.45);
+}
+
+#eraya-send-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  #eraya-chat-window {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    bottom: 90px;
+  }
+
+  #eraya-chat-bubble {
+    right: 16px;
+    bottom: 20px;
+  }
+}

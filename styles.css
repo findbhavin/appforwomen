@@ -35,7 +35,7 @@ body {
 
 .container {
     display: grid;
-    grid-template-columns: 260px 1fr 320px;
+    grid-template-columns: 260px minmax(0, 1fr) minmax(280px, 340px);
     min-height: 100vh;
     gap: 0;
 }
@@ -108,6 +108,7 @@ body {
 .main-content {
     padding: 40px;
     overflow-y: auto;
+    min-width: 0; /* allow grid column to shrink without hiding siblings */
 }
 
 /* Welcome Section */
@@ -257,11 +258,15 @@ body {
     line-height: 1.3;
 }
 
-/* Right Sidebar */
+/* Right Sidebar — keep visible in grid (calendar + React widgets) */
 .right-sidebar {
     background-color: var(--white);
     padding: 30px 25px;
     overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 280px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Calendar Section */
@@ -401,7 +406,7 @@ body {
 /* Responsive Design */
 @media (max-width: 1400px) {
     .container {
-        grid-template-columns: 240px 1fr 300px;
+        grid-template-columns: 240px minmax(0, 1fr) minmax(260px, 300px);
     }
     
     .feature-cards {
@@ -412,15 +417,27 @@ body {
 @media (max-width: 1024px) {
     .container {
         grid-template-columns: 1fr;
+        grid-auto-rows: auto;
     }
-    
-    .sidebar,
-    .right-sidebar {
+
+    /* Keep nav compact: hide left rail; stack main then right column so calendar stays visible */
+    .sidebar {
         display: none;
     }
-    
+
     .main-content {
         padding: 20px;
+        grid-column: 1;
+    }
+
+    .right-sidebar {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        padding: 24px 20px 32px;
+        border-top: 2px solid var(--powder-pink);
+        background: linear-gradient(180deg, var(--milky-white) 0%, var(--white) 40%);
+        box-shadow: 0 -8px 32px rgba(207, 116, 134, 0.08);
     }
 }
 
@@ -1746,4 +1763,279 @@ body {
 @keyframes fadeInRight {
     from { opacity: 0; transform: translateX(30px); }
     to { opacity: 1; transform: translateX(0); }
+}
+
+/* ==================== SYMPTOM ACTION ROW (Dashboard) ==================== */
+
+.symptom-action-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* "Past Week" secondary button */
+.past-logs-btn {
+    background: transparent;
+    color: var(--blush);
+    border: 2px solid var(--blush);
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.past-logs-btn:hover {
+    background: var(--blush);
+    color: var(--white);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(207, 116, 134, 0.3);
+}
+
+/* ==================== DATE-PICKER PANEL ==================== */
+
+.symptom-date-panel,
+.past-logs-panel {
+    display: none;          /* shown via .open */
+    margin-top: 20px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px rgba(207, 116, 134, 0.15);
+    border: 1.5px solid var(--powder-pink);
+    animation: fadeIn 0.2s ease-out;
+    text-align: left;
+}
+
+.symptom-date-panel.open,
+.past-logs-panel.open {
+    display: block;
+}
+
+.sdp-header,
+.plp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.sdp-close,
+.plp-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #bbb;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.sdp-close:hover,
+.plp-close:hover {
+    color: var(--blush);
+}
+
+.sdp-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--powder-pink);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    margin-bottom: 14px;
+    color: var(--dark-text);
+    background: var(--milky-white);
+}
+
+.sdp-input:focus {
+    border-color: var(--blush);
+    background: var(--white);
+}
+
+.sdp-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sdp-continue {
+    background: var(--blush);
+    color: var(--white);
+    border: none;
+    padding: 12px 26px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.sdp-continue:hover {
+    background: #b86474;
+    transform: scale(1.04);
+    box-shadow: 0 4px 14px rgba(207, 116, 134, 0.3);
+}
+
+/* ==================== PAST-WEEK LOG PANEL ==================== */
+
+.plp-list {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.plp-list::-webkit-scrollbar { width: 5px; }
+.plp-list::-webkit-scrollbar-thumb { background: var(--powder-pink); border-radius: 10px; }
+
+.plp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1.5px solid transparent;
+}
+
+.plp-row.has-data {
+    background: #FFF0F5;
+    border-color: var(--powder-pink);
+}
+
+.plp-row.no-data {
+    background: #fafafa;
+    border-color: #f0f0f0;
+}
+
+.plp-row:hover {
+    border-color: var(--blush);
+    background: var(--lavender-blush);
+    transform: translateX(3px);
+}
+
+.plp-date {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--dark-text);
+    min-width: 95px;
+    flex-shrink: 0;
+}
+
+.plp-info {
+    font-size: 13px;
+    flex: 1;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+
+.plp-info.logged    { color: #4ECDC4; font-weight: 500; }
+.plp-info.not-logged{ color: #ccc; }
+
+/* ==================== REACT COMPONENT MOUNT AREAS ==================== */
+
+/* Calendar root – fills the existing calendar-section container */
+#calendar-root {
+    min-height: 240px;
+    width: 100%;
+}
+
+#calendar-root:empty::before {
+    content: 'Loading calendar…';
+    display: block;
+    font-size: 13px;
+    color: var(--light-text);
+    padding: 12px 0;
+}
+
+/* React calendar wrapper – polished card (also see CalendarComponent.jsx) */
+.eraya-react-calendar {
+    background: var(--white);
+    border-radius: 20px;
+    border: 1px solid rgba(248, 187, 208, 0.85);
+    box-shadow: 0 8px 28px rgba(207, 116, 134, 0.12);
+    overflow: hidden;
+}
+
+.eraya-react-calendar .eraya-cal-header {
+    background: linear-gradient(135deg, var(--blush) 0%, var(--powder-pink) 100%);
+    padding: 16px 18px 14px;
+    color: var(--white);
+}
+
+.eraya-react-calendar .eraya-cal-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.eraya-react-calendar .eraya-cal-body {
+    padding: 16px 16px 18px;
+}
+
+.eraya-react-calendar .eraya-cal-today-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1.5px solid var(--powder-pink);
+    background: var(--milky-white);
+    color: var(--blush);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.eraya-react-calendar .eraya-cal-today-btn:hover {
+    background: var(--white);
+    transform: translateY(-1px);
+}
+
+/* Ensure right sidebar sections have consistent bottom spacing */
+#today-root,
+#history-root {
+    padding-top: 4px;
+}
+
+/* Symptom tracker slide-in animation */
+#symptom-tracker-root > div {
+    animation: fadeIn 0.25s ease-out;
+}
+
+/* Inline editable weight value */
+#history-root span[title="Click to edit weight"] {
+    transition: color 0.2s;
+}
+#history-root span[title="Click to edit weight"]:hover {
+    color: var(--blush);
+}
+
+/* React calendar day cells */
+.eraya-react-calendar .eraya-cal-day:not(.eraya-cal-day--muted) {
+    cursor: pointer;
+}
+
+.eraya-react-calendar .eraya-cal-day:not(.eraya-cal-day--muted):hover {
+    filter: brightness(0.94);
+    transform: scale(1.04);
+}
+
+/* Symptom tracker button hover */
+#symptom-tracker-root button:hover {
+    opacity: 0.88;
 }

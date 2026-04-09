@@ -1,4 +1,6 @@
 let selectedSymptoms = {};
+let waterGlasses = 0;
+const WATER_GOAL = 9; // 9 × 0.25L = 2.25L
 
 function safeParseObject(rawValue) {
     if (!rawValue) return {};
@@ -12,6 +14,16 @@ function safeParseObject(rawValue) {
 
 function getTodayDate() {
     return new Date().toISOString().split('T')[0];
+}
+
+// Returns the date to log: ?date= param if present and valid, otherwise today.
+function getLogDate() {
+    try {
+        var params = new URLSearchParams(window.location.search);
+        var d = params.get('date');
+        if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    } catch (_) {}
+    return getTodayDate();
 }
 
 function normalizeText(value) {
@@ -42,13 +54,17 @@ function normalizeSelections(rawSelections) {
 }
 
 function persistSelectionsToLocal() {
-    const today = getTodayDate();
+    const today = getLogDate();
     const allSymptoms = safeParseObject(localStorage.getItem('symptomsData'));
-    allSymptoms[today] = {
+    const weightVal = document.getElementById('weightInput') ? document.getElementById('weightInput').value : '';
+    var prev = allSymptoms[today] && typeof allSymptoms[today] === 'object' ? allSymptoms[today] : {};
+    allSymptoms[today] = Object.assign({}, prev, {
         date: today,
         symptoms: selectedSymptoms,
+        water: waterGlasses,
+        weight: weightVal ? parseFloat(weightVal) : null,
         timestamp: new Date().toISOString()
-    };
+    });
     try {
         localStorage.setItem('symptomsData', JSON.stringify(allSymptoms));
         return true;
@@ -175,7 +191,7 @@ function filterSymptoms(searchTerm) {
 }
 
 function loadSavedSymptomsFromLocal() {
-    const today = getTodayDate();
+    const today = getLogDate();
     const allSymptoms = safeParseObject(localStorage.getItem('symptomsData'));
     const todayRecord = allSymptoms[today];
     if (!todayRecord || typeof todayRecord !== 'object') return false;
@@ -204,7 +220,7 @@ function importApiSymptoms(log) {
 }
 
 async function loadSavedSymptomsFromApi() {
-    const today = getTodayDate();
+    const today = getLogDate();
     try {
         const response = await fetch('/api/symptoms?date=' + encodeURIComponent(today), {
             credentials: 'include'
@@ -250,7 +266,7 @@ async function saveSymptoms() {
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                log_date: getTodayDate(),
+                log_date: getLogDate(),
                 symptoms: labels,
                 intensity: calculateIntensity(),
                 notes: ''
@@ -312,7 +328,117 @@ function showSuccessMessage(text, isError) {
     }, 1200);
 }
 
+// ── Water tracker ──────────────────────────────────────────────────────────
+function renderWaterGlasses() {
+    var container = document.getElementById('waterGlasses');
+    if (!container) return;
+    container.innerHTML = '';
+    for (var i = 0; i < WATER_GOAL; i++) {
+        var glass = document.createElement('button');
+        glass.className = 'water-glass' + (i < waterGlasses ? ' filled' : '');
+        glass.type = 'button';
+        glass.title = ((i + 1) * 0.25).toFixed(2) + ' L';
+        glass.innerHTML = '💧';
+        glass.setAttribute('data-idx', i);
+        glass.addEventListener('click', (function(idx) {
+            return function() {
+                // click on filled → remove from that glass onward; click on empty → fill up to that glass
+                waterGlasses = (idx < waterGlasses) ? idx : idx + 1;
+                renderWaterGlasses();
+                updateWaterLabel();
+            };
+        })(i));
+        container.appendChild(glass);
+    }
+}
+
+function updateWaterLabel() {
+    var label = document.getElementById('waterLabel');
+    if (label) label.textContent = (waterGlasses * 0.25).toFixed(2) + ' / 2.25 L';
+}
+
+function adjustWater(delta) {
+    waterGlasses = Math.max(0, Math.min(WATER_GOAL, waterGlasses + delta));
+    renderWaterGlasses();
+    updateWaterLabel();
+}
+
+// ── Weight logger ───────────────────────────────────────────────────────────
+function logWeight() {
+    var input = document.getElementById('weightInput');
+    var saved = document.getElementById('weightSaved');
+    if (!input || !saved) return;
+    var val = parseFloat(input.value);
+    if (isNaN(val) || val < 20 || val > 300) {
+        saved.textContent = 'Please enter a valid weight (20–300 kg).';
+        saved.style.color = '#e85d86';
+        return;
+    }
+    saved.textContent = 'Logged: ' + val.toFixed(1) + ' kg';
+    saved.style.color = 'var(--blush, #FF6B9D)';
+}
+
+function clearWeight() {
+    var input = document.getElementById('weightInput');
+    var saved = document.getElementById('weightSaved');
+    if (input) input.value = '';
+    if (saved) saved.textContent = '';
+}
+
+// ── Load saved water/weight for the log date ────────────────────────────────
+function loadWaterWeightFromLocal() {
+    var today = getLogDate();
+    var allSymptoms = safeParseObject(localStorage.getItem('symptomsData'));
+    var record = allSymptoms[today];
+    if (!record) return;
+    if (typeof record.water === 'number') {
+        waterGlasses = Math.min(WATER_GOAL, Math.max(0, record.water));
+        renderWaterGlasses();
+        updateWaterLabel();
+    }
+    if (record.weight) {
+        var input = document.getElementById('weightInput');
+        var saved = document.getElementById('weightSaved');
+        if (input) input.value = record.weight;
+        if (saved) { saved.textContent = 'Logged: ' + parseFloat(record.weight).toFixed(1) + ' kg'; saved.style.color = 'var(--blush, #FF6B9D)'; }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Update page header to reflect the date being logged
+    (function updateHeaderDate() {
+        var logDate   = getLogDate();
+        var today     = getTodayDate();
+        var titleEl   = document.getElementById('symptomPageTitle');
+        var subtitleEl= document.getElementById('symptomPageSubtitle');
+        if (!titleEl) return;
+
+        if (logDate === today) {
+            titleEl.textContent = 'Today';
+        } else {
+            var d = new Date(logDate + 'T00:00:00');
+            titleEl.textContent = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        // Compute cycle day for the log date
+        if (subtitleEl) {
+            try {
+                var ud = JSON.parse(localStorage.getItem('userData') || '{}');
+                var lastPeriod  = ud.lastPeriod   ? new Date(ud.lastPeriod)     : null;
+                var cycleLength = parseInt(ud.cycleLength)  || 28;
+                if (lastPeriod) {
+                    var diff = Math.floor((new Date(logDate + 'T00:00:00') - lastPeriod) / 86400000);
+                    var dayInCycle = ((diff % cycleLength) + cycleLength) % cycleLength;
+                    subtitleEl.textContent = 'Cycle day ' + (dayInCycle + 1);
+                } else {
+                    subtitleEl.textContent = '';
+                }
+            } catch (_) {
+                subtitleEl.textContent = '';
+            }
+        }
+    })();
+
     document.querySelectorAll('.chip').forEach(function(chip) {
         chip.addEventListener('click', function() { toggleChip(chip); });
     });
