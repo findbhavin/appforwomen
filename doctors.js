@@ -123,29 +123,59 @@ function osmToDoctor(el, index) {
 // Fetch real doctors from Overpass API then resolve addresses via Nominatim
 // One Overpass query per specialty so results are correctly tagged
 // even when OSM nodes have no healthcare:speciality tag.
-var SPECIALTY_QUERIES = [
-    { specialty: 'gynecologist', keywords: 'gynaecolog|gynecolog|obstetric' },
-    { specialty: 'endocrinologist', keywords: 'endocrinolog|diabetes|thyroid' },
-    { specialty: 'nutritionist', keywords: 'diet|nutrition|nutritionist' },
-    { specialty: 'therapist', keywords: 'psycholog|psychiatr|mental_health|counsell' },
-    { specialty: 'pcos', keywords: 'pcos|reproductive_endocrinolog|fertility' }
-];
-
 var OVERPASS_ENDPOINTS = [
     'https://overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
     'https://overpass.openstreetmap.ru/api/interpreter'
 ];
 
-function buildSpecialtyQuery(lat, lon, radius, keywords) {
+function haversineDistanceKm(lat1, lon1, lat2, lon2) {
+    var R = 6371;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+function inferSpecialty(tags) {
+    var text = [
+        tags['healthcare:speciality'],
+        tags['healthcare:specialty'],
+        tags['speciality'],
+        tags['specialty'],
+        tags['healthcare'],
+        tags['medical_specialty'],
+        tags['name'],
+        tags['description'],
+        tags['operator']
+    ].filter(Boolean).join(' ').toLowerCase();
+
+    if (/pcos|fertility|reproductive\s*endocrinolog/.test(text)) return 'pcos';
+    if (/psycholog|psychiatr|mental|counsel|therap/.test(text)) return 'therapist';
+    if (/diet|nutrition/.test(text)) return 'nutritionist';
+    if (/endocrinolog|diabet|thyroid/.test(text)) return 'endocrinologist';
+    if (/gynae?colog|obstetric|wom.?n/.test(text)) return 'gynecologist';
+
+    var mapped = OSM_SPECIALTY_MAP[(tags['healthcare:speciality'] || tags['healthcare:specialty'] || '').toLowerCase().trim()];
+    return mapped || 'gynecologist';
+}
+
+function buildNearbyDoctorsQuery(lat, lon, radius) {
     return [
         '[out:json][timeout:25];',
         '(',
-        '  node["healthcare:speciality"~"' + keywords + '",i](around:' + radius + ',' + lat + ',' + lon + ');',
-        '  node["healthcare:specialty"~"' + keywords + '",i](around:' + radius + ',' + lat + ',' + lon + ');',
-        '  node["name"~"' + keywords + '",i](around:' + radius + ',' + lat + ',' + lon + ');',
+        '  node["amenity"="doctors"](around:' + radius + ',' + lat + ',' + lon + ');',
+        '  node["healthcare"~"doctor|clinic|hospital",i](around:' + radius + ',' + lat + ',' + lon + ');',
+        '  node["office"="therapist"](around:' + radius + ',' + lat + ',' + lon + ');',
+        '  way["amenity"="doctors"](around:' + radius + ',' + lat + ',' + lon + ');',
+        '  way["healthcare"~"doctor|clinic|hospital",i](around:' + radius + ',' + lat + ',' + lon + ');',
+        '  relation["amenity"="doctors"](around:' + radius + ',' + lat + ',' + lon + ');',
         ');',
-        'out 10;'
+        'out center 80;'
     ].join('\n');
 }
 
@@ -166,39 +196,35 @@ function fetchFromEndpoint(query, endpointIndex) {
 }
 
 function fetchDoctorsFromOSM(lat, lon) {
-    var radius = 4000;
+    var radius = 8000;
 
     showLoadingState();
-
-    var promises = SPECIALTY_QUERIES.map(function (spec) {
-        var query = buildSpecialtyQuery(lat, lon, radius, spec.keywords);
-        return fetchFromEndpoint(query, 0)
-            .then(function (data) {
-                return (data.elements || [])
-                    .map(function (el, i) {
-                        var doc = osmToDoctor(el, i);
-                        if (doc) doc.specialty = spec.specialty;
-                        return doc;
-                    })
-                    .filter(Boolean);
-            })
-            .catch(function () { return []; });
-    });
-
-    Promise.all(promises).then(function (results) {
+    var query = buildNearbyDoctorsQuery(lat, lon, radius);
+    fetchFromEndpoint(query, 0).then(function (data) {
         var seen = {};
-        var all = [];
-        results.forEach(function (group) {
-            group.forEach(function (doc) {
-                if (!seen[doc.id]) {
-                    seen[doc.id] = true;
-                    all.push(doc);
+        var all = (data.elements || []).map(function (el, i) {
+            var doc = osmToDoctor(el, i);
+            if (doc) {
+                doc.specialty = inferSpecialty(el.tags || {});
+                if (doc._lat != null && doc._lon != null) {
+                    var distanceKm = haversineDistanceKm(lat, lon, doc._lat, doc._lon);
+                    doc._distanceKm = distanceKm;
+                    doc.location = (doc.location || 'Address unavailable') + ' • ' + distanceKm.toFixed(1) + ' km away';
                 }
-            });
+            }
+            return doc;
+        }).filter(function (doc) {
+            if (!doc) return false;
+            var key = String(doc.id);
+            if (seen[key]) return false;
+            seen[key] = true;
+            return true;
+        }).sort(function (a, b) {
+            return (a._distanceKm || 9999) - (b._distanceKm || 9999);
         });
 
         if (all.length === 0) {
-            showNoResults('No specialist doctors found within 4 km. OSM data may be limited in your area.');
+            showNoResults('No nearby doctors found within 8 km. OSM data may be limited in your area.');
             return;
         }
 
@@ -215,12 +241,14 @@ function fetchDoctorsFromOSM(lat, lon) {
                         var cardEl = grid.querySelector('[data-id="' + doc.id + '"]');
                         if (cardEl) {
                             var locSpan = cardEl.querySelector('.doctor-location-text');
-                            if (locSpan) locSpan.textContent = addr;
+                            if (locSpan) locSpan.textContent = addr + (doc._distanceKm ? (' • ' + doc._distanceKm.toFixed(1) + ' km away') : '');
                         }
                     }
                 }
             });
         });
+    }).catch(function () {
+        showNoResults('Could not load nearby doctors right now. Please try again in a moment.');
     });
 }
 
@@ -563,5 +591,4 @@ function callEmergency() {
         window.location.href = 'tel:112';
     }
 }
-
 
