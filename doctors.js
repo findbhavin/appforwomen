@@ -128,6 +128,9 @@ var OVERPASS_ENDPOINTS = [
     'https://overpass.kumi.systems/api/interpreter',
     'https://overpass.openstreetmap.ru/api/interpreter'
 ];
+var OVERPASS_MAX_RETRIES = 2;
+var OVERPASS_CACHE_TTL_MS = 5 * 60 * 1000;
+var _fetchDoctorsInFlight = null;
 
 function haversineDistanceKm(lat1, lon1, lat2, lon2) {
     var R = 6371;
@@ -179,28 +182,75 @@ function buildNearbyDoctorsQuery(lat, lon, radius) {
     ].join('\n');
 }
 
-function fetchFromEndpoint(query, endpointIndex) {
+function sleep(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+}
+
+function getCachedDoctors(lat, lon) {
+    try {
+        var key = 'doctors_cache_v1:' + lat.toFixed(3) + ':' + lon.toFixed(3);
+        var raw = localStorage.getItem(key);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        if (!parsed || !parsed.savedAt || !Array.isArray(parsed.elements)) return null;
+        if (Date.now() - parsed.savedAt > OVERPASS_CACHE_TTL_MS) return null;
+        return parsed.elements;
+    } catch (e) {
+        return null;
+    }
+}
+
+function setCachedDoctors(lat, lon, elements) {
+    try {
+        var key = 'doctors_cache_v1:' + lat.toFixed(3) + ':' + lon.toFixed(3);
+        localStorage.setItem(key, JSON.stringify({
+            savedAt: Date.now(),
+            elements: elements || []
+        }));
+    } catch (e) {
+        // Ignore localStorage failures (private mode/quota exceeded).
+    }
+}
+
+function fetchFromEndpoint(query, endpointIndex, attempt) {
+    if (attempt == null) attempt = 0;
     if (endpointIndex >= OVERPASS_ENDPOINTS.length) {
         return Promise.reject(new Error('All endpoints failed'));
     }
     var url = OVERPASS_ENDPOINTS[endpointIndex] + '?data=' + encodeURIComponent(query);
     return fetch(url, { signal: AbortSignal.timeout(20000) })
         .then(function (r) {
-            if (!r.ok) throw new Error('Overpass returned ' + r.status);
+            if (!r.ok) {
+                // Overpass rate limit: retry current endpoint with exponential backoff,
+                // then move to the next mirror if retry budget is exhausted.
+                if (r.status === 429 && attempt < OVERPASS_MAX_RETRIES) {
+                    var retryAfterSec = parseInt(r.headers.get('Retry-After') || '0', 10);
+                    var baseDelay = retryAfterSec > 0 ? retryAfterSec * 1000 : 1200;
+                    var delayMs = baseDelay * Math.pow(2, attempt) + Math.floor(Math.random() * 400);
+                    return sleep(delayMs).then(function () {
+                        return fetchFromEndpoint(query, endpointIndex, attempt + 1);
+                    });
+                }
+                throw new Error('Overpass returned ' + r.status);
+            }
             return r.json();
         })
         .catch(function (err) {
             console.warn('Endpoint ' + OVERPASS_ENDPOINTS[endpointIndex] + ' failed:', err.message);
-            return fetchFromEndpoint(query, endpointIndex + 1);
+            return fetchFromEndpoint(query, endpointIndex + 1, 0);
         });
 }
 
 function fetchDoctorsFromOSM(lat, lon) {
+    // Avoid multiple simultaneous calls if this function is triggered repeatedly.
+    if (_fetchDoctorsInFlight) return;
+    _fetchDoctorsInFlight = true;
     var radius = 8000;
 
     showLoadingState();
     var query = buildNearbyDoctorsQuery(lat, lon, radius);
     fetchFromEndpoint(query, 0).then(function (data) {
+        setCachedDoctors(lat, lon, data.elements || []);
         var seen = {};
         var all = (data.elements || []).map(function (el, i) {
             var doc = osmToDoctor(el, i);
@@ -248,7 +298,37 @@ function fetchDoctorsFromOSM(lat, lon) {
             });
         });
     }).catch(function () {
-        showNoResults('Could not load nearby doctors right now. Please try again in a moment.');
+        var cachedElements = getCachedDoctors(lat, lon);
+        if (cachedElements && cachedElements.length) {
+            var seen = {};
+            var cachedDoctors = cachedElements.map(function (el, i) {
+                var doc = osmToDoctor(el, i);
+                if (doc) {
+                    doc.specialty = inferSpecialty(el.tags || {});
+                    if (doc._lat != null && doc._lon != null) {
+                        var distanceKm = haversineDistanceKm(lat, lon, doc._lat, doc._lon);
+                        doc._distanceKm = distanceKm;
+                        doc.location = (doc.location || 'Address unavailable') + ' • ' + distanceKm.toFixed(1) + ' km away';
+                    }
+                }
+                return doc;
+            }).filter(function (doc) {
+                if (!doc) return false;
+                var key = String(doc.id);
+                if (seen[key]) return false;
+                seen[key] = true;
+                return true;
+            }).sort(function (a, b) {
+                return (a._distanceKm || 9999) - (b._distanceKm || 9999);
+            });
+            doctorsData = cachedDoctors;
+            displayDoctors(doctorsData);
+            showTransientNotice('Showing recently cached doctors due to temporary map API limits.');
+            return;
+        }
+        showNoResults('Could not load nearby doctors right now (map API rate-limited). Please try again in a moment.');
+    }).finally(function () {
+        _fetchDoctorsInFlight = null;
     });
 }
 
@@ -269,6 +349,21 @@ function showNoResults(msg) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#888;">' +
         '<div style="font-size:2rem;margin-bottom:1rem;">🔍</div>' +
         '<p>' + msg + '</p></div>';
+}
+
+function showTransientNotice(msg) {
+    var existing = document.getElementById('doctorsTransientNotice');
+    if (existing) existing.remove();
+    var container = document.querySelector('.search-section') || document.querySelector('.main-content');
+    if (!container) return;
+    var note = document.createElement('div');
+    note.id = 'doctorsTransientNotice';
+    note.style.cssText = 'margin:10px 0 0;padding:10px 12px;border-radius:10px;background:#fff8e1;color:#805b00;font-size:0.9rem;border:1px solid #ffe08a;';
+    note.textContent = msg;
+    container.appendChild(note);
+    setTimeout(function () {
+        if (note && note.parentNode) note.parentNode.removeChild(note);
+    }, 7000);
 }
 
 // Initialize page – ask for location, then fetch real data
@@ -591,4 +686,3 @@ function callEmergency() {
         window.location.href = 'tel:112';
     }
 }
-
